@@ -18,7 +18,7 @@ import org.apache.pdfbox.pdmodel.interactive.form.*;
 import java.io.*;
 
 
-public class MainFrag extends Fragment {
+public class ReportForm extends Fragment {
     private View thisFrag;
     private Context context;
     private AssetManager assetMan;
