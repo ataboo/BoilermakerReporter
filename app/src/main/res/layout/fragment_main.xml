@@ -186,17 +186,279 @@
             android:id="@+id/jobStewardEdit"
             android:layout_below="@id/jobCompletionEdit"
             android:layout_alignParentRight="true"/>
+        <!--=====================Super Name=======================-->
+        <TextView
+            android:id="@+id/superNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/super_name_label"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/jobStewardEdit" />
 
+        <EditText
+            android:id="@+id/superNameEdit"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:layout_below="@id/jobStewardEdit"
+            android:layout_alignParentRight="true"/>
+
+        <!--====================Checkboxes=============================-->
+        <View
+            android:id="@+id/pb2"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/superNameEdit"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/darker_gray"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkboxParentLay"
+            android:orientation="horizontal"
+            android:layout_below="@id/pb2">
+            <LinearLayout
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/towCheckLay"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tow_header_label"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <View
+                    android:id="@+id/pb3"
+                    android:layout_width="120dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@android:color/darker_gray"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dutyCheckLay"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/duty_header_label"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <View
+                    android:id="@+id/pb4"
+                    android:layout_width="120dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@android:color/darker_gray"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--==========================Ratings============================-->
+        <View
+            android:id="@+id/pb5"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="6dp"
+            android:layout_below="@id/checkboxParentLay"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/safety_spinner_label"
+            android:id="@+id/safetySpinnerLabel"
+            android:layout_below="@id/pb5"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/safetySpinner"
+            android:layout_below="@id/pb5"
+            android:entries="@array/eval_spinner_ratings"
+            android:paddingBottom="8dp"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/worker_spinner_label"
+            android:id="@+id/workerSpinnerLabel"
+            android:layout_below="@id/safetySpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:id="@+id/workerSpinner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/safetySpinner"
+            android:entries="@array/eval_spinner_ratings"
+            android:paddingBottom="8dp"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/job_spinner_label"
+            android:id="@+id/jobSpinnerLabel"
+            android:layout_below="@id/workerSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:id="@+id/jobSpinner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/workerSpinner"
+            android:entries="@array/eval_spinner_ratings"
+            android:paddingBottom="8dp"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/init_spinner_label"
+            android:id="@+id/initSpinnerLabel"
+            android:layout_below="@id/jobSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:id="@+id/initSpinner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jobSpinner"
+            android:entries="@array/eval_spinner_ratings"
+            android:paddingBottom="8dp"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cap_spinner_label"
+            android:id="@+id/capSpinnerLabel"
+            android:layout_below="@id/initSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:id="@+id/capSpinner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/initSpinner"
+            android:entries="@array/eval_spinner_ratings"
+            android:paddingBottom="8dp"
+            android:layout_alignParentRight="true" />
+
+        <!--=======================Attendance===================================-->
+        <View
+            android:id="@+id/pb6"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="6dp"
+            android:layout_below="@id/capSpinner"
+            android:background="@android:color/darker_gray"/>
+        <TextView
+            android:id="@+id/absentSpinnerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pb6"
+            android:text="@string/absent_spinner_label"/>
+        <Spinner
+            android:id="@+id/absentSpinner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pb6"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="8dp"
+            android:entries="@array/attendance_spinner_ratings"/>
+        
+        <TextView
+            android:id="@+id/absentEditLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/absentSpinner"
+            android:layout_marginLeft="20dp"
+            android:text="@string/absent_edit_label"/>
+        <EditText
+            android:id="@+id/absentEdit"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/absentSpinner"
+            android:paddingBottom="8dp"
+            android:inputType="number"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:id="@+id/lateSpinnerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/absentEdit"
+            android:text="@string/late_spinner_label"/>
+        <Spinner
+            android:id="@+id/lateSpinner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/absentEdit"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="8dp"
+            android:entries="@array/attendance_spinner_ratings"/>
+
+        <TextView
+            android:id="@+id/lateEditLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lateSpinner"
+            android:layout_marginLeft="20dp"
+            android:text="@string/late_edit_label"/>
+        <EditText
+            android:id="@+id/lateEdit"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lateSpinner"
+            android:paddingBottom="8dp"
+            android:inputType="number"
+            android:layout_alignParentRight="true"/>
+
+        <View
+            android:id="@+id/pb7"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="6dp"
+            android:layout_below="@id/lateEdit"
+            android:background="@android:color/darker_gray"/>
+        <TextView
+            android:id="@+id/commentsEditLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pb7"
+            android:text="@string/comment_edit_label"/>
+        <EditText
+            android:id="@+id/commentsEdit"
+            android:minLines="3"
+            android:maxLines="10"
+            android:lines="8"
+            android:gravity="top|left"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/commentsEditLabel"
+            android:paddingBottom="8dp"
+            android:inputType="textMultiLine"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Go"
+            android:text="Submit"
             android:id="@+id/pushBootan"
-            android:layout_below="@+id/jobStewardEdit"
+            android:layout_below="@id/commentsEdit"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-        <!--====================================================-->
 
     </RelativeLayout>
 </ScrollView>

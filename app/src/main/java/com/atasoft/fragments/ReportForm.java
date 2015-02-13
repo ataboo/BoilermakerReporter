@@ -22,95 +22,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
+//TODO: Super name not working.  Comments placeholder.  Job Type Checkboxes. Rating Checkboxes.
 
 
 public class ReportForm extends Fragment implements OnClickListener {
-    public class FormFieldHolder {
-        public String outputString;
-        public String name;
-        public String editTextName;
-        public FormFieldHolder(String fieldName, String editTextName){
-            this.name = fieldName;
-            this.editTextName = editTextName;
-            this.outputString = " ";
-        }
-
-        public void setOutputFromEdit(){
-            int resId = getResources().getIdentifier(editTextName, "id", context.getPackageName());
-            EditText eText = (EditText) thisFrag.findViewById(resId);
-            if(eText == null) return;
-            String outStr = eText.getText().toString();
-            if (outStr.matches("")) outStr = " ";
-
-            //sinText 1, 2 , 3 are seperated
-            if(name.contains("sinText")) {
-                if(outStr.length() != 9) return;
-                int sinInt = Integer.parseInt(name.substring(7));
-                switch(sinInt){
-                    case 1:
-                        outStr = outStr.substring(0,3);
-                        break;
-                    case 2:
-                        outStr = outStr.substring(3,6);
-                        break;
-                    default:
-                        outStr = outStr.substring(6);
-                        break;
-                }
-            }
-            this.outputString = outStr;
-        }
-    }
-
-    //Edit Text fields.  [PDF form name, EditText View name]
-    private static final String[][] fieldNameEdits = {
-            {"aprNameText","appNameEdit"},
-            {"sinText1","sinNumberEdit"},
-            {"sinText2","sinNumberEdit"},
-            {"sinText3","sinNumberEdit"},
-            {"empNameText","empNameEdit"},
-            {"jobLocText","jobLocationEdit"},
-            {"jobStewardText","jobStewardEdit"},
-            {"curDateText","currentDateEdit"},
-            {"jobStartText","jobStartEdit"},
-            {"jobEndText","jobEndEdit"}};
-    //CheckBox Spinner Fields.  [Spinner View name, PDFForm option name1, PDFForm option displayname 1, ...]
-    private static final String[][] fieldNameSpinners = {
-            {"projTypeSpinner", "projConstBox", "Construction", "projMaintBox", "Maintenance", "projDemoBox", "Demolition", "projShopBox", "Shop"},
-            {}};
-    //CheckBox Toggle Fields [Form Checkbox Name, Display String]
-    private static final String[][] toggleNameSpinners = {
-            //Type of Work
-            {"towAtomic", "Atomic Rad Work"},
-            {"towBins", "Bins & Hoppers"},
-            {"towBoilers", "Boilers"},
-            {"towConds", "Condensers/Evaporators"},
-            {"towFurnaces", "Furnaces"},
-            {"towExchangers", "Heat Exchangers"},
-            {"towPenstock", "Penstock"},
-            {"towPrecips", "Precipitators"},
-            {"towVessel", "Pressure Vessel"},
-            {"towScroll", "Scroll Casings"},
-            {"towScrubbers", "Scrubbers"},
-            {"towStacks", "Stacks & Breeching"},
-            {"towTanks", "Tanks"},
-            {"towTowers", "Towers"},
-            //Duties
-            {"dutyOHS", "Adhere to OH & S"},
-            {"dutyBurning", "Burning"},
-            {"dutyWatch", "Confined Space Watch"},
-            {"dutyExpanding", "Expanding"},
-            {"dutyGlass", "Fibreglass"},
-            {"dutyFitting", "Fitting"},
-            {"dutyGrinding", "Grinding"},
-            {"dutyLayout", "Layout"},
-            {"dutyMetalizing", "Metalizing"},
-            {"dutyReading", "Reading Drawings"},
-            {"dutyRigging", "Rigging"},
-            {"dutySpark", "Spark Watch"},
-            {"dutyTack", "Tack Welding"},
-            {"dutyTray", "Tray Work"}};
 
     private HashMap<String, FormFieldHolder> fieldMap;
 
@@ -138,28 +53,90 @@ public class ReportForm extends Fragment implements OnClickListener {
 
     }
 
-
+    LinearLayout towLay;
+    LinearLayout dutyLay;
     private void setupViews(){
         Button goButton = (Button) thisFrag.findViewById(R.id.pushBootan);
         goButton.setOnClickListener(this);
 
         if(fieldMap == null) {
             fieldMap = new HashMap<String, FormFieldHolder>();
-            for (int i = 0; i < fieldNameEdits.length; i++) {
-                fieldMap.put(fieldNameEdits[i][0],
-                        new FormFieldHolder(fieldNameEdits[i][0], fieldNameEdits[i][1]));
-                //Log.w("pdf stuff", "Added " + fieldNameStrings[i][0] + " to location " + i);
+            for(String[] fieldName: FormFieldHolder.fieldNameEdits) {
+                fieldMap.put(fieldName[0],
+                        new FormFieldHolder(fieldName[0], fieldName[1]));
+            }
+            for(String[] rating: FormFieldHolder.ratingSpinners){
+                fieldMap.put(rating[0],
+                        new FormFieldHolder(rating[1], rating[0], 5));
+            }
+            for(String[] rating: FormFieldHolder.attendanceSpinners){
+                fieldMap.put(rating[0],
+                        new FormFieldHolder(rating[1], rating[0], 3));
             }
         }
         pBar = new ProgressDialog(context);
 
+        this.towLay = (LinearLayout) thisFrag.findViewById(R.id.towCheckLay);
+        this.dutyLay = (LinearLayout) thisFrag.findViewById(R.id.dutyCheckLay);
+        populateChecks(thisFrag, towLay, dutyLay, FormFieldHolder.checkNames);
+
+    }
+
+    private static void populateChecks(View thisFrag, LinearLayout towLay, LinearLayout dutyLay, String[][] names){
+        if(towLay == null || dutyLay == null){
+            Log.e("ReportForm Fragment", "One of the LinearLayouts was null.  Aborted populating with checks.");
+            return;
+        }
+        for(int i=0; i<names.length; i++){
+            LinearLayout.LayoutParams checkWrap = new LinearLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            CheckBox check = new CheckBox(thisFrag.getContext());
+            check.setLayoutParams(checkWrap);
+            check.setTag(names[i][0]);
+            check.setText(names[i][1]);
+            if(i<14){
+                towLay.addView(check);
+            } else {
+                dutyLay.addView(check);
+            }
+        }
     }
 
     private void goEdits(PDAcroForm acroForm) throws IOException{
-        for(int i=0; i<fieldNameEdits.length; i++){
-            FormFieldHolder holder = fieldMap.get(fieldNameEdits[i][0]);
-            holder.setOutputFromEdit();
-            PDFManager.setField(acroForm, fieldNameEdits[i][0], holder.outputString);
+        for(String[] fieldName : FormFieldHolder.fieldNameEdits){
+            FormFieldHolder holder = fieldMap.get(fieldName[0]);
+            holder.setOutputFromEdit((EditText) getViewByName(holder.viewName));
+            PDFManager.setField(acroForm, fieldName[0], holder.outputString);
+        }
+
+        for(String[] fieldName : FormFieldHolder.ratingSpinners){
+            FormFieldHolder holder = fieldMap.get(fieldName[0]);
+            holder.setOutputFromSpinner((Spinner) getViewByName(holder.viewName));
+            String[][] fieldArr = holder.getFieldArray();
+            PDFManager.setFields(acroForm, fieldArr);
+        }
+
+        for(String[] fieldName : FormFieldHolder.attendanceSpinners){
+            FormFieldHolder holder = fieldMap.get(fieldName[0]);
+            holder.setOutputFromSpinner((Spinner) getViewByName(holder.viewName));
+            String[][] fieldArr = holder.getFieldArray();
+            PDFManager.setFields(acroForm, fieldArr);
+        }
+
+
+
+        setFieldsFromChildren(towLay, acroForm);
+        setFieldsFromChildren(dutyLay, acroForm);
+    }
+
+    private void setFieldsFromChildren(LinearLayout parentLay, PDAcroForm acroForm) throws IOException{
+        //0 is the title, 1 is the pagebreak
+        for(int i=0; i<parentLay.getChildCount(); i++){
+            View child = parentLay.getChildAt(i);
+            if(child instanceof CheckBox){
+                PDFManager.setCheckBox(acroForm, parentLay.getChildAt(i).getTag().toString(),
+                        ((CheckBox) child).isChecked());
+            }
         }
     }
 
@@ -239,6 +216,11 @@ public class ReportForm extends Fragment implements OnClickListener {
 
     private void toaster(String text){
         Toast.makeText(context, text, Toast.LENGTH_SHORT);
+    }
+
+    private View getViewByName(String name){
+        int resId = getResources().getIdentifier(name, "id", context.getPackageName());
+        return thisFrag.findViewById(resId);
     }
 }
 

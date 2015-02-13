@@ -21,6 +21,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDCheckbox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDChoice;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDFieldTreeNode;
@@ -53,10 +54,30 @@ public class PDFManager {
         if( field != null ) {
             field.setValue(value);
             //Set as Readonly
-            field.getDictionary().setInt("Ff", 1);
+            field.setReadonly(true);
         }
         else {
             System.err.println( "No field found with name:" + name );
+        }
+    }
+
+    public static void setFields(PDAcroForm acroForm, String[][] fieldNames) throws IOException{
+        for(String[] fieldArr: fieldNames){
+            setField(acroForm, fieldArr[0], fieldArr[1]);
+        }
+    }
+
+    public static void setCheckBox(PDAcroForm acroForm, String name, boolean isChecked) throws IOException{
+        PDFieldTreeNode field = acroForm.getField(name);
+        if(field instanceof PDCheckbox){
+            if(isChecked){
+                ((PDCheckbox) field).check();
+            } else {
+                ((PDCheckbox) field).unCheck();
+            }
+            //set as readonly
+            //field.getDictionary().setInt("Ff", 1);
+            field.setReadonly(true);
         }
     }
 
