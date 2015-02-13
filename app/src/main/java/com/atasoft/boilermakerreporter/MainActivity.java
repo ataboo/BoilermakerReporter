@@ -1,11 +1,9 @@
 package com.atasoft.boilermakerreporter;
 
-import android.app.*;
 import android.content.Intent;
 import android.os.*;
 import android.support.v4.app.*;
 import android.view.*;
-import android.widget.*;
 
 import com.atasoft.fragments.*;
 
@@ -43,12 +41,12 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void openAbout(){
-        Intent intent = new Intent(this, MainFrag.class);
+        Intent intent = new Intent(this, ReportForm.class);
         startActivity(intent);
     }
 
     private void swapFrag(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new MainFrag()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ReportForm()).commit();
     }
 }
 

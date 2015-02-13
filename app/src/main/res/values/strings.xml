@@ -4,5 +4,15 @@
     <string name="app_name">Boilermaker Reporter</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="apprentice_name_label">Apprentice Name:</string>
+    <string name="report_type_label">Report Type:</string>
+    <string name="sin_number_label">Sin Number:</string>
+    <string name="employer_name_label">Employer Name:</string>
+    <string name="current_date_label">Current Date:</string>
+    <string name="job_start_label">Job Start:</string>
+    <string name="job_completion_label">Job End:</string>
+    <string name="job_location_label">Job Location:</string>
+    <string name="job_steward_label">Job Steward:</string>
+
 
 </resources>
