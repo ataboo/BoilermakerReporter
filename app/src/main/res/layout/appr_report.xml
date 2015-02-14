@@ -5,229 +5,229 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity$PlaceholderFragment">
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
         <TextView
-            android:id="@+id/reportTypeSpinLabel"
+            android:id="@+id/appr_reportTypeSpinLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/super_header_label"
+            android:text="@string/apprentice_header_label"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <View
-            android:id="@+id/pb1"
+            android:id="@+id/appr_pb1"
             android:layout_width="fill_parent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_height="1dp"
-            android:layout_below="@id/reportTypeSpinLabel"
+            android:layout_below="@id/appr_reportTypeSpinLabel"
             android:background="@android:color/darker_gray"/>
         <!--===============String Fields=================-->
         <TextView
-            android:id="@+id/appNameLabel"
+            android:id="@+id/appr_appNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/apprentice_name_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/pb1" />
+            android:layout_below="@id/appr_pb1" />
         <EditText
-            android:id="@+id/appNameEdit"
+            android:id="@+id/appr_appNameEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:layout_below="@id/pb1"
+            android:layout_below="@id/appr_pb1"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/sinNumberLabel"
+            android:id="@+id/appr_sinNumberLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/sin_number_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/appNameEdit" />
+            android:layout_below="@id/appr_appNameEdit" />
         <EditText
-            android:id="@+id/sinNumberEdit"
+            android:id="@+id/appr_sinNumberEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:layout_below="@id/appNameEdit"
+            android:layout_below="@id/appr_appNameEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/empNameLabel"
+            android:id="@+id/appr_empNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/employer_name_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/sinNumberEdit" />
+            android:layout_below="@id/appr_sinNumberEdit" />
         <EditText
-            android:id="@+id/empNameEdit"
+            android:id="@+id/appr_empNameEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:layout_below="@id/sinNumberEdit"
+            android:layout_below="@id/appr_sinNumberEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/jobLocationLabel"
+            android:id="@+id/appr_jobLocationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/job_location_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/empNameEdit" />
+            android:layout_below="@id/appr_empNameEdit" />
         <EditText
-            android:id="@+id/jobLocationEdit"
+            android:id="@+id/appr_jobLocationEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:ems="10"
-            android:layout_below="@id/empNameEdit"
+            android:layout_below="@id/appr_empNameEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/currentDateLabel"
+            android:id="@+id/appr_currentDateLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/current_date_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/jobLocationEdit" />
+            android:layout_below="@id/appr_jobLocationEdit" />
         <EditText
-            android:id="@+id/currentDateEdit"
+            android:id="@+id/appr_currentDateEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="date"
             android:ems="10"
-            android:layout_below="@id/jobLocationEdit"
+            android:layout_below="@id/appr_jobLocationEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/jobStartLabel"
+            android:id="@+id/appr_jobStartLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/job_start_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/currentDateEdit" />
+            android:layout_below="@id/appr_currentDateEdit" />
         <EditText
-            android:id="@+id/jobStartEdit"
+            android:id="@+id/appr_jobStartEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="date"
             android:ems="10"
-            android:layout_below="@id/currentDateEdit"
+            android:layout_below="@id/appr_currentDateEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/jobEndLabel"
+            android:id="@+id/appr_jobEndLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/job_completion_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/jobStartEdit" />
+            android:layout_below="@id/appr_jobStartEdit" />
         <EditText
-            android:id="@+id/jobEndEdit"
+            android:id="@+id/appr_jobEndEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="date"
             android:ems="10"
-            android:layout_below="@id/jobStartEdit"
+            android:layout_below="@id/appr_jobStartEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/jobStewardLabel"
+            android:id="@+id/appr_jobStewardLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/job_steward_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/jobEndEdit" />
+            android:layout_below="@id/appr_jobEndEdit" />
         <EditText
-            android:id="@+id/jobStewardEdit"
+            android:id="@+id/appr_jobStewardEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:layout_below="@id/jobEndEdit"
+            android:layout_below="@id/appr_jobEndEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/superNameLabel"
+            android:id="@+id/appr_phoneLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/super_name_label"
+            android:text="@string/appr_phone_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/jobStewardEdit" />
+            android:layout_below="@id/appr_jobStewardEdit" />
         <EditText
-            android:id="@+id/superNameEdit"
+            android:id="@+id/appr_phoneEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="phone"
             android:ems="10"
-            android:layout_below="@id/jobStewardEdit"
+            android:layout_below="@id/appr_jobStewardEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/jobTypeLabel"
+            android:id="@+id/appr_jobTypeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/job_type_label"
-            android:layout_below="@id/superNameEdit"
+            android:layout_below="@id/appr_phoneEdit"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
-            android:id="@+id/jobTypeSpinner"
+            android:id="@+id/appr_jobTypeSpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/superNameEdit"
+            android:layout_below="@id/appr_phoneEdit"
+            android:entries="@array/job_types_items"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
         <!--====================Checkboxes=============================-->
         <View
-            android:id="@+id/pb2"
+            android:id="@+id/appr_pb2"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/jobTypeSpinner"
+            android:layout_below="@id/appr_jobTypeSpinner"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/darker_gray"/>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/checkboxParentLay"
+            android:id="@+id/appr_checkboxParentLay"
             android:orientation="horizontal"
-            android:layout_below="@id/pb2">
+            android:layout_below="@id/appr_pb2">
             <LinearLayout
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/towCheckLay"
+                android:id="@+id/appr_towCheckLay"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
@@ -235,7 +235,7 @@
                     android:text="@string/tow_header_label"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
                 <View
-                    android:id="@+id/pb3"
+                    android:id="@+id/appr_pb3"
                     android:layout_width="120dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="4dp"
@@ -243,7 +243,7 @@
                     android:background="@android:color/darker_gray"/>
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/dutyCheckLay"
+                android:id="@+id/appr_dutyCheckLay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -253,7 +253,7 @@
                     android:text="@string/duty_header_label"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
                 <View
-                    android:id="@+id/pb4"
+                    android:id="@+id/appr_pb4"
                     android:layout_width="120dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="4dp"
@@ -264,219 +264,148 @@
 
         <!--==========================Ratings============================-->
         <View
-            android:id="@+id/pb5"
+            android:id="@+id/appr_pb5"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="6dp"
-            android:layout_below="@id/checkboxParentLay"
+            android:layout_below="@id/appr_checkboxParentLay"
             android:background="@android:color/darker_gray"/>
 
         <TextView
-            android:id="@+id/safetySpinnerLabel"
+            android:id="@+id/appr_appraiseLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/safety_spinner_label"
-            android:layout_below="@id/pb5"
+            android:text="@string/appr_appraise_label"
+            android:layout_below="@id/appr_pb5"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
-            android:id="@+id/safetySpinner"
+            android:id="@+id/appr_appraiseSpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pb5"
-            android:entries="@array/eval_spinner_ratings"
+            android:layout_below="@id/appr_pb5"
+            android:entries="@array/appr_eval_spinner_ratings"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
         <TextView
-            android:id="@+id/workerSpinnerLabel"
+            android:id="@+id/appr_relationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/worker_spinner_label"
-            android:layout_below="@id/safetySpinner"
+            android:text="@string/appr_relationship_label"
+            android:layout_below="@id/appr_appraiseSpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
-            android:id="@+id/workerSpinner"
+            android:id="@+id/appr_relationSpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/safetySpinner"
-            android:entries="@array/eval_spinner_ratings"
+            android:layout_below="@id/appr_appraiseSpinner"
+            android:entries="@array/appr_eval_spinner_ratings"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
         <TextView
-            android:id="@+id/jobSpinnerLabel"
+            android:id="@+id/appr_journeyLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/job_spinner_label"
-            android:layout_below="@id/workerSpinner"
+            android:text="@string/appr_journey_label"
+            android:layout_below="@id/appr_relationSpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
-            android:id="@+id/jobSpinner"
+            android:id="@+id/appr_journeySpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/workerSpinner"
-            android:entries="@array/eval_spinner_ratings"
+            android:entries="@array/appr_journey_items"
+            android:layout_below="@id/appr_relationSpinner"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
         <TextView
-            android:id="@+id/initSpinnerLabel"
+            android:id="@+id/appr_lateLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/init_spinner_label"
-            android:layout_below="@id/jobSpinner"
+            android:text="@string/appr_late_label"
+            android:layout_below="@id/appr_journeySpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
-            android:id="@+id/initSpinner"
+            android:id="@+id/appr_lateSpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/jobSpinner"
-            android:entries="@array/eval_spinner_ratings"
+            android:layout_below="@id/appr_journeySpinner"
+            android:entries="@array/appr_attendance_spinner"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
         <TextView
-            android:id="@+id/capSpinnerLabel"
+            android:id="@+id/appr_absentLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cap_spinner_label"
-            android:layout_below="@id/initSpinner"
+            android:text="@string/appr_absent_label"
+            android:layout_below="@id/appr_lateSpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
-            android:id="@+id/capSpinner"
+            android:id="@+id/appr_absentSpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/initSpinner"
-            android:entries="@array/eval_spinner_ratings"
+            android:layout_below="@id/appr_lateSpinner"
+            android:entries="@array/appr_attendance_spinner"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
         <TextView
-            android:id="@+id/ratingSpinnerLabel"
+            android:id="@+id/appr_ratioSpinnerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/rating_spinner_label"
-            android:layout_below="@id/capSpinner"
+            android:text="@string/appr_ratio_label"
+            android:layout_below="@id/appr_absentSpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
-            android:id="@+id/ratingSpinner"
-            android:layout_width="220dp"
+            android:id="@+id/appr_ratioSpinner"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/capSpinner"
+            android:layout_below="@id/appr_absentSpinner"
+            android:entries="@array/appr_ratio_spinner_items"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
-
-        <!--=======================Attendance===================================-->
-        <View
-            android:id="@+id/pb6"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="6dp"
-            android:layout_below="@id/ratingSpinner"
-            android:background="@android:color/darker_gray"/>
-        <TextView
-            android:id="@+id/absentSpinnerLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/pb6"
-            android:text="@string/absent_spinner_label"/>
-        <Spinner
-            android:id="@+id/absentSpinner"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/pb6"
-            android:layout_alignParentRight="true"
-            android:paddingBottom="8dp"
-            android:entries="@array/attendance_spinner_ratings"/>
-
-        <TextView
-            android:id="@+id/absentEditLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/absentSpinner"
-            android:layout_marginLeft="20dp"
-            android:text="@string/absent_edit_label"/>
-        <EditText
-            android:id="@+id/absentEdit"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/absentSpinner"
-            android:paddingBottom="8dp"
-            android:inputType="number"
-            android:layout_alignParentRight="true"/>
-
-        <TextView
-            android:id="@+id/lateSpinnerLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/absentEdit"
-            android:text="@string/late_spinner_label"/>
-        <Spinner
-            android:id="@+id/lateSpinner"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/absentEdit"
-            android:layout_alignParentRight="true"
-            android:paddingBottom="8dp"
-            android:entries="@array/attendance_spinner_ratings"/>
-
-        <TextView
-            android:id="@+id/lateEditLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lateSpinner"
-            android:layout_marginLeft="20dp"
-            android:text="@string/late_edit_label"/>
-        <EditText
-            android:id="@+id/lateEdit"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lateSpinner"
-            android:paddingBottom="8dp"
-            android:inputType="number"
-            android:layout_alignParentRight="true"/>
 
         <View
-            android:id="@+id/pb7"
+            android:id="@+id/appr_pb7"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="6dp"
-            android:layout_below="@id/lateEdit"
+            android:layout_below="@id/appr_ratioSpinner"
             android:background="@android:color/darker_gray"/>
         <TextView
-            android:id="@+id/commentsEditLabel"
+            android:id="@+id/appr_commentsEditLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pb7"
+            android:layout_below="@id/appr_pb7"
             android:text="@string/comment_edit_label"/>
         <EditText
-            android:id="@+id/commentsEdit"
+            android:id="@+id/appr_commentsEdit"
             android:minLines="3"
             android:maxLines="10"
             android:lines="8"
             android:gravity="top|left"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/commentsEditLabel"
+            android:layout_below="@id/appr_commentsEditLabel"
             android:paddingBottom="8dp"
             android:inputType="textMultiLine"/>
         <Button
-            android:id="@+id/pushBootan"
+            android:id="@+id/appr_pushBootan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Submit"
-            android:layout_below="@id/commentsEdit"
+            android:text="@string/button_submit"
+            android:layout_below="@id/appr_commentsEdit"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
     </RelativeLayout>

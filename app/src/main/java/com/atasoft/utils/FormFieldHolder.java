@@ -66,11 +66,6 @@ public class FormFieldHolder {
                     "setOutputFromSpinner. Failed.");
             return;
         }
-        if(!(spinner instanceof Spinner)){
-            Log.e("FormFieldHolder", this.fieldName + " holder expected Spinner in " +
-                    "setOutputFromEdit. Failed.");
-            return;
-        }
         this.selectedIndex = spinner.getSelectedItemPosition();
     }
 
@@ -85,45 +80,7 @@ public class FormFieldHolder {
     }
 
     //<editor-fold desc="Field Name Arrays">
-    //Edit Text fields.  [EditText name, PDF form name]
-    public static final String[][] fieldNameEdits = {
-            {"appNameEdit", "aprNameText"},
-            {"sinNumberEdit", "sinText1"},
-            {"sinNumberEdit", "sinText2"},
-            {"sinNumberEdit", "sinText3"},
-            {"empNameEdit", "empNameText"},
-            {"jobLocationEdit", "jobLocText"},
-            {"jobStewardEdit", "jobStewardText"},
-            {"currentDateEdit", "curDateText"},
-            {"jobStartEdit", "jobStartText"},
-            {"jobEndEdit", "jobEndText"},
-            {"absentEdit", "absNumberBox"},
-            {"lateEdit", "lateNumberBox"},
-            {"superNameEdit", "superName"},
-            {"commentsEdit", "commentsText"}};
-
-    //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
-    public static final String[][] jobTypeSpinnerOptions = {
-            {"projTypeSpinner", "projType"},
-            {"Construction","Maintenance","Demolition", "Shop"}};
-
-    //CheckBox/Spinner Fields.  [Spinner View, PDF box1 name, display name 1, PDF box2 name, ...]
-    public static final String[][] ratingSpinnerOptions = {
-            {"ratingSpinner", "rating"},
-            {"As good as a Journeyman", "Needs more experience", "Below average"}};
-
-    //Rating Excellent, Above Average, Average, Below Average, Unsatisfactory [Spinner View name, textfield name 1-5]
-    public static final String[][] ratingSpinners = {
-            {"safetySpinner", "safetyBox"},
-            {"workerSpinner", "workersBox"},
-            {"jobSpinner", "jobBox"},
-            {"initSpinner", "initBox"},
-            {"capSpinner", "capBox"}};
-    //Rating 1-3
-    public static final String[][] attendanceSpinners = {
-            {"absentSpinner", "absBox"},
-            {"lateSpinner", "lateBox"}};
-
+    //===============================Common Fields====================================
     //CheckBox Toggle Fields [Form Checkbox Name, Display String]
     public static final String[][] towChecks = {
             //Type of Work
@@ -157,5 +114,90 @@ public class FormFieldHolder {
             {"dutySpark", "Spark Watch"},
             {"dutyTack", "Tack Welding"},
             {"dutyTray", "Tray Work"}};
+
+    //=========================Super Form======================
+    //Edit Text fields.  [EditText name, PDF form name]
+    public static final String[][] fieldNameEdits = {
+            {"appNameEdit", "aprNameText"},
+            {"sinNumberEdit", "sinText1"},
+            {"sinNumberEdit", "sinText2"},
+            {"sinNumberEdit", "sinText3"},
+            {"empNameEdit", "empNameText"},
+            {"jobLocationEdit", "jobLocText"},
+            {"jobStewardEdit", "jobStewardText"},
+            {"currentDateEdit", "curDateText"},
+            {"jobStartEdit", "jobStartText"},
+            {"jobEndEdit", "jobEndText"},
+            {"absentEdit", "absNumberBox"},
+            {"lateEdit", "lateNumberBox"},
+            {"superNameEdit", "superName"},
+            {"commentsEdit", "commentsText"}};
+
+    //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
+    public static final String[][] jobTypeSpinnerOptions = {
+            {"projTypeSpinner", "projType"},
+            {"Construction","Maintenance","Demolition", "Shop"}};
+
+    //CheckBox/Spinner Fields.  [Spinner View, PDF box, display name 1, PDF box2 name, ...]
+    public static final String[][] ratingSpinnerOptions = {
+            {"ratingSpinner", "rating"},
+            {"As good as a Journeyman", "Needs more experience", "Below average"}};
+    //Rating Excellent, Above Average, Average, Below Average, Unsatisfactory [Spinner View name, textfield name 1-5]
+    public static final String[][] ratingSpinners = {
+            {"safetySpinner", "safetyBox"},
+            {"workerSpinner", "workersBox"},
+            {"jobSpinner", "jobBox"},
+            {"initSpinner", "initBox"},
+            {"capSpinner", "capBox"}};
+
+    //Rating 1-3
+    public static final String[][] attendanceSpinners = {
+            {"absentSpinner", "absBox"},
+            {"lateSpinner", "lateBox"}};
+
+    //=========================Apprentice Form======================
+    //Edit Text fields.  [EditText name, PDF form name]
+    public static final String[][] apprfieldNameEdits = {
+            {"appr_appNameEdit", "aprNameText"},
+            {"appr_appNameEdit", "aprNameText2"},
+            {"appr_sinNumberEdit", "sinText1"},
+            {"appr_sinNumberEdit", "sinText2"},
+            {"appr_sinNumberEdit", "sinText3"},
+            {"appr_empNameEdit", "empNameText"},
+            {"appr_jobLocationEdit", "jobLocText"},
+            {"appr_jobStewardEdit", "jobStewardText"},
+            {"appr_currentDateEdit", "curDateText"},
+            {"appr_currentDateEdit", "curDateText2"},
+            {"appr_jobStartEdit", "jobStartText"},
+            {"appr_jobEndEdit", "jobEndText"},
+            {"appr_phoneEdit", "phoneText"},
+            {"appr_commentsEdit", "commentsText"}};
+    //[SpinnerName, fieldName(1-4 convention)]
+    //pre-filled [very good, good, average, poor]
+    public static final String[][] apprRatingSpinners = {
+            {"appr_appraiseSpinner", "appraise"},
+            {"appr_relationSpinner", "relate"}};
+    //pre-filled [yes, no, often, rarely, never]
+    public static final String[][] apprAttendSpinners = {
+            {"appr_lateSpinner", "late"},
+            {"appr_absentSpinner", "absent"}};
+    //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
+    public static final String[][] apprJobSpinnerOptions = {
+            {"projTypeSpinner", "projType"},
+            {"Construction","Maintenance","Demolition", "Shop"}};
+    //[Spinner name, field name base], [itemString1, ...]
+    public static final String[][] apprJourneySpinner = {
+            {"appr_journeySpinner", "jman"},
+            {"Instructive", "Helpful", "Unhelpful", "Impatient"}};
+    //[Spinner name, field name base], [itemString1, ...]
+    public static final String[][] apprRatioSpinner = {
+            {"appr_ratioSpinner", "ratio"},
+            {"Yes", "No", "Unknown"}};
+
+    //Additional Text Fields
+    public static final String[][] apprFieldEdits = {
+            {"appr_phoneEdit", "phoneText"},
+            {"appr_appNameEdit", "aprNameText2"}};
+
     //</editor-fold
 }
