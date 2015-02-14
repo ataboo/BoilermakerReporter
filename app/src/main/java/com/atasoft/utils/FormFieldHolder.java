@@ -1,5 +1,6 @@
 package com.atasoft.utils;
 
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -7,14 +8,15 @@ public class FormFieldHolder {
     public String outputString = " ";
 
 
-    public String fieldName;
+    private String fieldName;
     public String viewName;
-    public int fieldCount = 0;
-    public int selectedIndex = 0;
+    private int fieldCount = 0;
+    private int selectedIndex = 0;
     public FormFieldHolder(String fieldName, String viewName){
         this.fieldName = fieldName;
         this.viewName = viewName;
     }
+    //For spinner that sets PDF fieldName1, fieldName2,...
     public FormFieldHolder(String fieldName, String viewName, int fieldCount){
         this.fieldName = fieldName;
         this.viewName = viewName;
@@ -22,15 +24,26 @@ public class FormFieldHolder {
     }
 
     public void setOutputFromEdit(EditText eText){
-        /*int resId = getResources().getIdentifier(viewName, "id", context.getPackageName());
-        EditText eText = (EditText) thisFrag.findViewById(resId);*/
-        if(eText == null || !(eText instanceof EditText)) return;
+        if(eText == null){
+            Log.e("FormFieldHolder", this.fieldName + " holder received null View in " +
+                    "setOutputFromEdit. Failed.");
+            return;
+        }
+        if(!(eText instanceof EditText)){
+            Log.e("FormFieldHolder", this.fieldName + " holder expected EditText in " +
+                    "setOutputFromEdit. Failed.");
+            return;
+        }
         String outStr = eText.getText().toString();
         if (outStr.matches("")) outStr = " ";
 
-        //sinText 1, 2 , 3 are seperated
+        //sinText 1, 2 , 3 are split into 3 views from 9 digit sin.
         if(fieldName.contains("sinText")) {
-            if(outStr.length() != 9) return;
+            outStr = outStr.replace(" ", "");
+            if(outStr.length() != 9){
+                Log.w("FormFieldHolder", "Sin number was not 9 digits.");
+                return;
+            }
             int sinInt = Integer.parseInt(fieldName.substring(7));
             switch(sinInt){
                 case 1:
@@ -48,13 +61,20 @@ public class FormFieldHolder {
     }
 
     public void setOutputFromSpinner(Spinner spinner){
-        /*int resId = getResources().getIdentifier(viewName, "id", context.getPackageName());
-        Spinner spinner = (Spinner) thisFrag.findViewById(resId);*/
-
-        if(spinner == null || !(spinner instanceof Spinner)) return;
+        if(spinner == null){
+            Log.e("FormFieldHolder", this.fieldName + " holder received null View in " +
+                    "setOutputFromSpinner. Failed.");
+            return;
+        }
+        if(!(spinner instanceof Spinner)){
+            Log.e("FormFieldHolder", this.fieldName + " holder expected Spinner in " +
+                    "setOutputFromEdit. Failed.");
+            return;
+        }
         this.selectedIndex = spinner.getSelectedItemPosition();
     }
 
+    //creates array [field name sequential][value]
     public String[][] getFieldArray(){
         String[][] outArr = new String[fieldCount][2];
         for(int i=0; i< fieldCount; i++){
@@ -64,25 +84,33 @@ public class FormFieldHolder {
         return outArr;
     }
 
-    //Edit Text fields.  [PDF form name, EditText View name]
+    //<editor-fold desc="Field Name Arrays">
+    //Edit Text fields.  [EditText name, PDF form name]
     public static final String[][] fieldNameEdits = {
-            {"aprNameText","appNameEdit"},
-            {"sinText1","sinNumberEdit"},
-            {"sinText2","sinNumberEdit"},
-            {"sinText3","sinNumberEdit"},
-            {"empNameText","empNameEdit"},
-            {"jobLocText","jobLocationEdit"},
-            {"jobStewardText","jobStewardEdit"},
-            {"curDateText","currentDateEdit"},
-            {"jobStartText","jobStartEdit"},
-            {"jobEndText","jobEndEdit"},
-            {"absNumberBox", "absentEdit"},
-            {"lateNumberBox", "lateEdit"}};
+            {"appNameEdit", "aprNameText"},
+            {"sinNumberEdit", "sinText1"},
+            {"sinNumberEdit", "sinText2"},
+            {"sinNumberEdit", "sinText3"},
+            {"empNameEdit", "empNameText"},
+            {"jobLocationEdit", "jobLocText"},
+            {"jobStewardEdit", "jobStewardText"},
+            {"currentDateEdit", "curDateText"},
+            {"jobStartEdit", "jobStartText"},
+            {"jobEndEdit", "jobEndText"},
+            {"absentEdit", "absNumberBox"},
+            {"lateEdit", "lateNumberBox"},
+            {"superNameEdit", "superName"},
+            {"commentsEdit", "commentsText"}};
 
-    //CheckBox Spinner Fields.  [Spinner View name, PDFForm option name1, PDFForm option displayname 1, ...]
-    public static final String[] jobTypeSpinner = {"projTypeSpinner", "projConstBox", "Construction",
-            "projMaintBox", "Maintenance", "projDemoBox", "Demolition", "projShopBox", "Shop"};
+    //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
+    public static final String[][] jobTypeSpinnerOptions = {
+            {"projTypeSpinner", "projType"},
+            {"Construction","Maintenance","Demolition", "Shop"}};
 
+    //CheckBox/Spinner Fields.  [Spinner View, PDF box1 name, display name 1, PDF box2 name, ...]
+    public static final String[][] ratingSpinnerOptions = {
+            {"ratingSpinner", "rating"},
+            {"As good as a Journeyman", "Needs more experience", "Below average"}};
 
     //Rating Excellent, Above Average, Average, Below Average, Unsatisfactory [Spinner View name, textfield name 1-5]
     public static final String[][] ratingSpinners = {
@@ -97,7 +125,7 @@ public class FormFieldHolder {
             {"lateSpinner", "lateBox"}};
 
     //CheckBox Toggle Fields [Form Checkbox Name, Display String]
-    public static final String[][] checkNames = {
+    public static final String[][] towChecks = {
             //Type of Work
             {"towAtomic", "Atomic Rad Work"},
             {"towBins", "Bins & Hoppers"},
@@ -112,8 +140,9 @@ public class FormFieldHolder {
             {"towScrubbers", "Scrubbers"},
             {"towStacks", "Stacks & Breeching"},
             {"towTanks", "Tanks"},
-            {"towTowers", "Towers"},
-            //Duties
+            {"towTowers", "Towers"}};
+
+    public static final String[][] dutyChecks = {
             {"dutyOHS", "Adhere to OH & S"},
             {"dutyBurning", "Burning"},
             {"dutyWatch", "Confined Space Watch"},
@@ -128,4 +157,5 @@ public class FormFieldHolder {
             {"dutySpark", "Spark Watch"},
             {"dutyTack", "Tack Welding"},
             {"dutyTray", "Tray Work"}};
+    //</editor-fold
 }

@@ -13,180 +13,168 @@
         android:layout_height="fill_parent">
 
         <TextView
+            android:id="@+id/reportTypeSpinLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/report_type_label"
-            android:id="@+id/reportTypeSpinLabel"
+            android:text="@string/super_header_label"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-
-        <Spinner
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/reportTypeSpinner"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true" />
         <View
             android:id="@+id/pb1"
             android:layout_width="fill_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_height="1dp"
             android:layout_below="@id/reportTypeSpinLabel"
             android:background="@android:color/darker_gray"
             />
-        <!--===============Apprentice Name=================-->
+        <!--===============String Fields=================-->
         <TextView
+            android:id="@+id/appNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/apprentice_name_label"
-            android:id="@+id/appNameLabel"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/pb1" />
-
         <EditText
+            android:id="@+id/appNameEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/appNameEdit"
             android:layout_below="@id/pb1"
             android:layout_alignParentRight="true"/>
-        <!--=================Sin Number===================-->
+
         <TextView
+            android:id="@+id/sinNumberLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/sin_number_label"
-            android:id="@+id/sinNumberLabel"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/appNameEdit" />
-
         <EditText
+            android:id="@+id/sinNumberEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/sinNumberEdit"
             android:layout_below="@id/appNameEdit"
             android:layout_alignParentRight="true"/>
-        <!--==================Employer Name======================-->
+
         <TextView
+            android:id="@+id/empNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/employer_name_label"
-            android:id="@+id/empNameLabel"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/sinNumberEdit" />
         <EditText
+            android:id="@+id/empNameEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/empNameEdit"
             android:layout_below="@id/sinNumberEdit"
             android:layout_alignParentRight="true"/>
-        <!--=================Job Location=====================-->
+
         <TextView
+            android:id="@+id/jobLocationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/job_location_label"
-            android:id="@+id/jobLocationLabel"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/empNameEdit" />
-
         <EditText
+            android:id="@+id/jobLocationEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:ems="10"
-            android:id="@+id/jobLocationEdit"
             android:layout_below="@id/empNameEdit"
             android:layout_alignParentRight="true"/>
-        <!--=====================Date==========================-->
+
         <TextView
+            android:id="@+id/currentDateLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/current_date_label"
-            android:id="@+id/currentDateLabel"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/jobLocationEdit" />
-
         <EditText
+            android:id="@+id/currentDateEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="date"
             android:ems="10"
-            android:id="@+id/currentDateEdit"
             android:layout_below="@id/jobLocationEdit"
             android:layout_alignParentRight="true"/>
-        <!--=======================Job Start Date=======================-->
+
         <TextView
+            android:id="@+id/jobStartLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/job_start_label"
-            android:id="@+id/jobStartLabel"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/currentDateEdit" />
-
         <EditText
+            android:id="@+id/jobStartEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="date"
             android:ems="10"
-            android:id="@+id/jobStartEdit"
             android:layout_below="@id/currentDateEdit"
             android:layout_alignParentRight="true"/>
-        <!--=======================Completion Date===========================-->
+
         <TextView
+            android:id="@+id/jobEndLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/job_completion_label"
-            android:id="@+id/jobCompletionLabel"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/jobStartEdit" />
-
         <EditText
+            android:id="@+id/jobEndEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="date"
             android:ems="10"
-            android:id="@+id/jobCompletionEdit"
             android:layout_below="@id/jobStartEdit"
             android:layout_alignParentRight="true"/>
-        <!--=======================Job Steward===========================-->
+
         <TextView
+            android:id="@+id/jobStewardLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/job_steward_label"
-            android:id="@+id/jobStewardLabel"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/jobCompletionEdit" />
-
+            android:layout_below="@id/jobEndEdit" />
         <EditText
+            android:id="@+id/jobStewardEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/jobStewardEdit"
-            android:layout_below="@id/jobCompletionEdit"
+            android:layout_below="@id/jobEndEdit"
             android:layout_alignParentRight="true"/>
-        <!--=====================Super Name=======================-->
+
         <TextView
             android:id="@+id/superNameLabel"
             android:layout_width="wrap_content"
@@ -196,7 +184,6 @@
             android:text="@string/super_name_label"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/jobStewardEdit" />
-
         <EditText
             android:id="@+id/superNameEdit"
             android:layout_width="200dp"
@@ -206,12 +193,29 @@
             android:layout_below="@id/jobStewardEdit"
             android:layout_alignParentRight="true"/>
 
+        <TextView
+            android:id="@+id/jobTypeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/job_type_label"
+            android:layout_below="@id/superNameEdit"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:id="@+id/jobTypeSpinner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/superNameEdit"
+            android:paddingBottom="8dp"
+            android:layout_alignParentRight="true" />
+
         <!--====================Checkboxes=============================-->
         <View
             android:id="@+id/pb2"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/superNameEdit"
+            android:layout_below="@id/jobTypeSpinner"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/darker_gray"/>
@@ -240,9 +244,9 @@
                     android:background="@android:color/darker_gray"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/dutyCheckLay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/dutyCheckLay"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
@@ -270,27 +274,27 @@
             android:background="@android:color/darker_gray"/>
 
         <TextView
+            android:id="@+id/safetySpinnerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/safety_spinner_label"
-            android:id="@+id/safetySpinnerLabel"
             android:layout_below="@id/pb5"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
+            android:id="@+id/safetySpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:id="@+id/safetySpinner"
             android:layout_below="@id/pb5"
             android:entries="@array/eval_spinner_ratings"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
         <TextView
+            android:id="@+id/workerSpinnerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/worker_spinner_label"
-            android:id="@+id/workerSpinnerLabel"
             android:layout_below="@id/safetySpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -304,10 +308,10 @@
             android:layout_alignParentRight="true" />
 
         <TextView
+            android:id="@+id/jobSpinnerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_spinner_label"
-            android:id="@+id/jobSpinnerLabel"
             android:layout_below="@id/workerSpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -321,10 +325,10 @@
             android:layout_alignParentRight="true" />
 
         <TextView
+            android:id="@+id/initSpinnerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/init_spinner_label"
-            android:id="@+id/initSpinnerLabel"
             android:layout_below="@id/jobSpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -338,10 +342,10 @@
             android:layout_alignParentRight="true" />
 
         <TextView
+            android:id="@+id/capSpinnerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cap_spinner_label"
-            android:id="@+id/capSpinnerLabel"
             android:layout_below="@id/initSpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -354,6 +358,23 @@
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
+        <TextView
+            android:id="@+id/ratingSpinnerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/rating_spinner_label"
+            android:layout_below="@id/capSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:id="@+id/ratingSpinner"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/capSpinner"
+            android:paddingBottom="8dp"
+            android:layout_alignParentRight="true" />
+
         <!--=======================Attendance===================================-->
         <View
             android:id="@+id/pb6"
@@ -361,7 +382,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="6dp"
-            android:layout_below="@id/capSpinner"
+            android:layout_below="@id/ratingSpinner"
             android:background="@android:color/darker_gray"/>
         <TextView
             android:id="@+id/absentSpinnerLabel"
@@ -377,7 +398,7 @@
             android:layout_alignParentRight="true"
             android:paddingBottom="8dp"
             android:entries="@array/attendance_spinner_ratings"/>
-        
+
         <TextView
             android:id="@+id/absentEditLabel"
             android:layout_width="wrap_content"
@@ -451,14 +472,13 @@
             android:paddingBottom="8dp"
             android:inputType="textMultiLine"/>
         <Button
+            android:id="@+id/pushBootan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Submit"
-            android:id="@+id/pushBootan"
             android:layout_below="@id/commentsEdit"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-
     </RelativeLayout>
 </ScrollView>

@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">Boilermaker Reporter</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="super_header_label">Apprentice Report (Supervisor)</string>
     <string name="apprentice_name_label">Apprentice Name:</string>
     <string name="report_type_label">Report Type:</string>
     <string name="sin_number_label">Sin Number:</string>
@@ -13,7 +13,8 @@
     <string name="job_completion_label">Job End:</string>
     <string name="job_location_label">Job Location:</string>
     <string name="job_steward_label">Job Steward:</string>
-    <string name="super_name_label">Supervisor Name</string>
+    <string name="super_name_label">Supervisor Name:</string>
+    <string name="job_type_label">Job Type:</string>
     <string name="duty_header_label">Duties:</string>
     <string name="tow_header_label">Type of Work:</string>
     <string name="safety_spinner_label">Attitude to Safety</string>
@@ -21,6 +22,7 @@
     <string name="job_spinner_label">Attitude to Job</string>
     <string name="init_spinner_label">Initiative</string>
     <string name="cap_spinner_label">Capability</string>
+    <string name="rating_spinner_label">Overall Ability</string>
     <string name="absent_spinner_label">Absent</string>
     <string name="absent_edit_label">Number of Times:</string>
     <string name="late_spinner_label">Late</string>
@@ -33,13 +35,6 @@
         <item>Average</item>
         <item>Below Average</item>
         <item>Unsatisfactory</item>
-    </string-array>
-    <string-array name="eval_spinner_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
     </string-array>
 
     <string-array name="attendance_spinner_ratings">
