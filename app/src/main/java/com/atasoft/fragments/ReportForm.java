@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class ReportForm extends Fragment implements OnClickListener {
 
     private static final String inputPath = "Files/ApprenticeReportSuper.pdf";
-    private static final String outputFileName = "Report";
+    private static final String outputFileName = "ApprReport_Super";
     private static final String outputFolder = "/Documents";
     public static final int PUSHED_BUTTON = 0;
     public static final int STARTED_EDITS = 1;

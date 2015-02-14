@@ -28,8 +28,7 @@
             android:layout_marginBottom="8dp"
             android:layout_height="1dp"
             android:layout_below="@id/reportTypeSpinLabel"
-            android:background="@android:color/darker_gray"
-            />
+            android:background="@android:color/darker_gray"/>
         <!--===============String Fields=================-->
         <TextView
             android:id="@+id/appNameLabel"
