@@ -204,8 +204,9 @@
             android:id="@+id/jobTypeSpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:entries="@array/job_types_items"
             android:layout_below="@id/superNameEdit"
-            android:paddingBottom="8dp"
+            android:layout_marginTop="12dp"
             android:layout_alignParentRight="true" />
 
         <!--====================Checkboxes=============================-->
@@ -370,6 +371,7 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/capSpinner"
+            android:entries="@array/ability_ratings"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 

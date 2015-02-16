@@ -17,6 +17,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.atasoft.boilermakerreporter.AboutPage"
+            android:label="About"
+            android:parentActivityName="com.atasoft.boilermakerreporter.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.atasoft.boilermakerreporter.MainActivity" />>
+        </activity>
+
     </application>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

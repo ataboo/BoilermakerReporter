@@ -107,7 +107,6 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
             }
 
             this.jobTypeSpinner = (Spinner) thisFrag.findViewById(R.id.jobTypeSpinner);
-            populateSpinner(jobTypeSpinner, FormFieldHolder.jobTypeSpinnerOptions[1]);
 
             fieldMap.put(FormFieldHolder.jobTypeSpinnerOptions[0][1],
                     new FormFieldHolder(FormFieldHolder.jobTypeSpinnerOptions[0][1],
@@ -209,9 +208,10 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
     }
 
     private void populateSpinner(Spinner spinner, String[] strings){
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item, strings);
         spinner.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 

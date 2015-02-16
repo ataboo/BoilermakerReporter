@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.atasoft.fragments.*;
 
-//TODO: fix logs, add about, email intent?, permanence
+//TODO: fix logs, email intent, permanence maybe?, graphics
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
@@ -60,17 +60,22 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
-/*		Handle presses on the action bar items
-        switch(item.getItemId()){
+        switch(item.getItemId()) {
+            /*
             case R.id.action_settings:
-                openSettings();
+                //openSettings();
                 return true;
+            */
             case R.id.action_about:
                 openAbout();
                 return true;
-        }*/
-		return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openAbout(){
+        Intent intent = new Intent(this, AboutPage.class);
+        startActivity(intent);
     }
 
     private void swapFrag(int launchMode) {
