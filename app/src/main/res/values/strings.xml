@@ -15,7 +15,8 @@
     <string name="super_header_label">Apprentice Report (Supervisor)</string>
     <string name="apprentice_name_label">Apprentice Name:</string>
     <string name="report_type_label">Report Type:</string>
-    <string name="sin_number_label">Sin Number:</string>
+    <string name="reg_number_label">Registration Number:</string>
+    <string name="local_number_label">Your Local Number:</string>
     <string name="employer_name_label">Employer Name:</string>
     <string name="current_date_label">Current Date:</string>
     <string name="job_start_label">Job Start:</string>
@@ -44,10 +45,11 @@
     <string name="appr_phone_label">Phone Number:</string>
     <string name="appr_appraise_label">Appraisal of the Job</string>
     <string name="appr_relationship_label">Relationship with Crew</string>
-    <string name="appr_journey_label">How were the Journeymen?</string>
+    <string name="appr_super_rate_label">Mentouring from Supervisor</string>
+    <string name="appr_journey_label">Mentouring from Journeymen</string>
     <string name="appr_late_label">Were you ever late?</string>
     <string name="appr_absent_label">Were you ever absent?</string>
-    <string name="appr_ratio_label">Ratio of Apprentices upheld?</string>
+    <string name="appr_hours_label">Total Hours Worked:</string>
 
     <string-array name="eval_spinner_ratings">
         <item>Excellent</item>
@@ -67,18 +69,6 @@
         <item>Rarely</item>
         <item>Often</item>
     </string-array>
-    <string-array name="attendance_spinner_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="appr_eval_spinner_ratings">
-        <item>Very Good</item>
-        <item>Good</item>
-        <item>Average</item>
-        <item>Poor</item>
-    </string-array>
 
     <string-array name="appr_attendance_spinner">
         <item>Yes</item>
@@ -88,24 +78,19 @@
         <item>Never</item>
     </string-array>
 
-    <string-array name="appr_ratio_spinner_items">
-        <item>Yes</item>
-        <item>No</item>
-        <item>Unknown</item>
-    </string-array>
-
-    <string-array name="appr_journey_items">
-        <item>Instructive</item>
-        <item>Helpful</item>
-        <item>Unhelpful</item>
-        <item>Impatient</item>
-    </string-array>
-
     <string-array name="job_types_items">
         <item>Construction</item>
         <item>Maintenance</item>
         <item>Demolition</item>
         <item>Shop</item>
     </string-array>
+
+    <string-array name="appr_rating_items">
+        <item>5 - Excellent</item>
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1 - Poor</item>
+    </string-array>>
 
 </resources>

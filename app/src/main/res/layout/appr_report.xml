@@ -48,21 +48,57 @@
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/appr_sinNumberLabel"
+            android:id="@+id/appr_regNumberLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/sin_number_label"
+            android:text="@string/reg_number_label"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/appr_appNameEdit" />
         <EditText
-            android:id="@+id/appr_sinNumberEdit"
+            android:id="@+id/appr_regNumEdit"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"
+            android:ems="10"
+            android:layout_below="@id/appr_appNameEdit"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:id="@+id/appr_localNumberLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/local_number_label"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/appr_regNumEdit" />
+        <EditText
+            android:id="@+id/appr_localNumEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:layout_below="@id/appr_appNameEdit"
+            android:layout_below="@id/appr_regNumEdit"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:id="@+id/appr_hoursLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/appr_hours_label"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/appr_localNumEdit" />
+        <EditText
+            android:id="@+id/appr_hoursEdit"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:layout_below="@id/appr_localNumEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
@@ -73,14 +109,14 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/employer_name_label"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/appr_sinNumberEdit" />
+            android:layout_below="@id/appr_hoursEdit" />
         <EditText
             android:id="@+id/appr_empNameEdit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:layout_below="@id/appr_sinNumberEdit"
+            android:layout_below="@id/appr_hoursEdit"
             android:layout_alignParentRight="true"/>
 
         <TextView
@@ -285,7 +321,7 @@
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/appr_pb5"
-            android:entries="@array/appr_eval_spinner_ratings"
+            android:entries="@array/appr_rating_items"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
@@ -302,7 +338,24 @@
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/appr_appraiseSpinner"
-            android:entries="@array/appr_eval_spinner_ratings"
+            android:entries="@array/appr_rating_items"
+            android:paddingBottom="8dp"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:id="@+id/appr_superRateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/appr_super_rate_label"
+            android:layout_below="@id/appr_relationSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:id="@+id/appr_superRateSpinner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/appr_rating_items"
+            android:layout_below="@id/appr_relationSpinner"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
@@ -311,15 +364,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/appr_journey_label"
-            android:layout_below="@id/appr_relationSpinner"
+            android:layout_below="@id/appr_superRateSpinner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <Spinner
             android:id="@+id/appr_journeySpinner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:entries="@array/appr_journey_items"
-            android:layout_below="@id/appr_relationSpinner"
+            android:entries="@array/appr_rating_items"
+            android:layout_below="@id/appr_superRateSpinner"
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
@@ -357,30 +410,13 @@
             android:paddingBottom="8dp"
             android:layout_alignParentRight="true" />
 
-        <TextView
-            android:id="@+id/appr_ratioSpinnerLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/appr_ratio_label"
-            android:layout_below="@id/appr_absentSpinner"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Spinner
-            android:id="@+id/appr_ratioSpinner"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/appr_absentSpinner"
-            android:entries="@array/appr_ratio_spinner_items"
-            android:paddingBottom="8dp"
-            android:layout_alignParentRight="true" />
-
         <View
             android:id="@+id/appr_pb7"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="6dp"
-            android:layout_below="@id/appr_ratioSpinner"
+            android:layout_below="@id/appr_absentSpinner"
             android:background="@android:color/darker_gray"/>
         <TextView
             android:id="@+id/appr_commentsEditLabel"

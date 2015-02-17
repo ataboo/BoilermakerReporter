@@ -8,10 +8,10 @@ public class FormFieldHolder {
     public String outputString = " ";
 
 
-    private String fieldName;
+    public String fieldName;
     public String viewName;
     private int fieldCount = 0;
-    private int selectedIndex = 0;
+    public int selectedIndex = 0;
     public FormFieldHolder(String fieldName, String viewName){
         this.fieldName = fieldName;
         this.viewName = viewName;
@@ -155,49 +155,13 @@ public class FormFieldHolder {
             {"absentSpinner", "absBox"},
             {"lateSpinner", "lateBox"}};
 
-    //=========================Apprentice Form======================
-    //Edit Text fields.  [EditText name, PDF form name]
-    public static final String[][] apprfieldNameEdits = {
-            {"appr_appNameEdit", "aprNameText"},
-            {"appr_appNameEdit", "aprNameText2"},
-            {"appr_sinNumberEdit", "sinText1"},
-            {"appr_sinNumberEdit", "sinText2"},
-            {"appr_sinNumberEdit", "sinText3"},
-            {"appr_empNameEdit", "empNameText"},
-            {"appr_jobLocationEdit", "jobLocText"},
-            {"appr_jobStewardEdit", "jobStewardText"},
-            {"appr_currentDateEdit", "curDateText"},
-            {"appr_currentDateEdit", "curDateText2"},
-            {"appr_jobStartEdit", "jobStartText"},
-            {"appr_jobEndEdit", "jobEndText"},
-            {"appr_phoneEdit", "phoneText"},
-            {"appr_commentsEdit", "commentsText"}};
-    //[SpinnerName, fieldName(1-4 convention)]
-    //pre-filled [very good, good, average, poor]
-    public static final String[][] apprRatingSpinners = {
-            {"appr_appraiseSpinner", "appraise"},
-            {"appr_relationSpinner", "relate"}};
-    //pre-filled [yes, no, often, rarely, never]
-    public static final String[][] apprAttendSpinners = {
-            {"appr_lateSpinner", "late"},
-            {"appr_absentSpinner", "absent"}};
-    //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
-    public static final String[][] apprJobSpinnerOptions = {
-            {"projTypeSpinner", "projType"},
-            {"Construction","Maintenance","Demolition", "Shop"}};
-    //[Spinner name, field name base], [itemString1, ...]
-    public static final String[][] apprJourneySpinner = {
-            {"appr_journeySpinner", "jman"},
-            {"Instructive", "Helpful", "Unhelpful", "Impatient"}};
-    //[Spinner name, field name base], [itemString1, ...]
-    public static final String[][] apprRatioSpinner = {
-            {"appr_ratioSpinner", "ratio"},
-            {"Yes", "No", "Unknown"}};
 
-    //Additional Text Fields
-    public static final String[][] apprFieldEdits = {
-            {"appr_phoneEdit", "phoneText"},
-            {"appr_appNameEdit", "aprNameText2"}};
+
+    //---Apprentice----
+    //New ones
+    //regNumText, localText, hoursText, appraiseBox, relationBox, superBox, journeyBox
+    //Removed
+    // Sin Number, ratio
 
     //</editor-fold
 }

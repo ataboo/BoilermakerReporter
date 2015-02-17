@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.atasoft.fragments.*;
 
-//TODO: fix logs, email intent, permanence maybe?, graphics
+//TODO: fix logs, email intent, permanence maybe?
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {

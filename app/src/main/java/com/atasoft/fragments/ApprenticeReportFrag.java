@@ -49,10 +49,6 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
     private LinearLayout towLay;
     private LinearLayout dutyLay;
     private Spinner jobTypeSpinner;
-    private Spinner journeySpinner;
-    private Spinner ratioSpinner;
-
-    private String[][]fieldNameEdits;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,8 +101,6 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
 
         pBar = new ProgressDialog(context);
 
-        this.fieldNameEdits = FormFieldHolder.apprfieldNameEdits;
-
         //fieldMap stores the non-checkbox fields as <(String) fieldName from pdf, (FormFieldHolder)>
         if(fieldMap == null) {
             fieldMap = new HashMap<String, FormFieldHolder>();
@@ -114,32 +108,23 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
                 fieldMap.put(fieldName[1],
                         new FormFieldHolder(fieldName[1], fieldName[0]));
             }
-            //Second field for name EditText
-            fieldMap.put(FormFieldHolder.apprFieldEdits[1][0],
-                    new FormFieldHolder(FormFieldHolder.apprFieldEdits[1][0],
-                            FormFieldHolder.apprFieldEdits[1][1]));
-
 
             //already populated
-            for(String[] arr : FormFieldHolder.apprRatingSpinners){
-                fieldMap.put(arr[1], new FormFieldHolder(arr[1], arr[0], 4));
-            }
-            for(String[] arr : FormFieldHolder.apprAttendSpinners){
+            for(String[] arr : ratingSpinners){
                 fieldMap.put(arr[1], new FormFieldHolder(arr[1], arr[0], 5));
             }
-
-            this.jobTypeSpinner = (Spinner) thisFrag.findViewById(R.id.appr_jobTypeSpinner);
-            setupSpinner(jobTypeSpinner, FormFieldHolder.apprJobSpinnerOptions);
-            this.journeySpinner = (Spinner) thisFrag.findViewById(R.id.appr_journeySpinner);
-            setupSpinner(journeySpinner, FormFieldHolder.apprJourneySpinner);
-            this.ratioSpinner = (Spinner) thisFrag.findViewById(R.id.appr_ratioSpinner);
-            setupSpinner(ratioSpinner, FormFieldHolder.apprRatioSpinner);
+            for(String[] arr : attendSpinners){
+                fieldMap.put(arr[1], new FormFieldHolder(arr[1], arr[0], 5));
+            }
+            fieldMap.put(jobSpinnerOptions[0][1],
+                    new FormFieldHolder(jobSpinnerOptions[0][1], jobSpinnerOptions[0][0]));
         }
+        this.jobTypeSpinner = (Spinner) thisFrag.findViewById(R.id.appr_jobTypeSpinner);
 
         this.towLay = (LinearLayout) thisFrag.findViewById(R.id.appr_towCheckLay);
-        PDFManager.populateChecks(thisFrag, towLay, FormFieldHolder.towChecks);
+        PDFManager.populateChecks(thisFrag, towLay, towChecks);
         this.dutyLay = (LinearLayout) thisFrag.findViewById(R.id.appr_dutyCheckLay);
-        PDFManager.populateChecks(thisFrag, dutyLay, FormFieldHolder.dutyChecks);
+        PDFManager.populateChecks(thisFrag, dutyLay, dutyChecks);
     }
 
     private void editFields(PDAcroForm acroForm) throws IOException{
@@ -148,15 +133,13 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
             holder.setOutputFromEdit((EditText) PDFManager.getViewByName(holder.viewName, thisFrag));
             PDFManager.setTextField(acroForm, fieldName[1], holder.outputString);
         }
-        for(String[] arr: FormFieldHolder.apprRatingSpinners){
+        for(String[] arr: ratingSpinners){
+            processRatingSpinner(arr[1], (Spinner) PDFManager.getViewByName(arr[0], thisFrag), acroForm);
+        }
+        for(String[] arr: attendSpinners){
             processCheckSpinner(arr[1], (Spinner) PDFManager.getViewByName(arr[0], thisFrag), acroForm);
         }
-        for(String[] arr: FormFieldHolder.apprAttendSpinners){
-            processCheckSpinner(arr[1], (Spinner) PDFManager.getViewByName(arr[0], thisFrag), acroForm);
-        }
-        processCheckSpinner(FormFieldHolder.apprJobSpinnerOptions[0][1], jobTypeSpinner, acroForm);
-        processCheckSpinner(FormFieldHolder.apprJourneySpinner[0][1], journeySpinner, acroForm);
-        processCheckSpinner(FormFieldHolder.apprRatioSpinner[0][1], ratioSpinner, acroForm);
+        processCheckSpinner(jobSpinnerOptions[0][1], jobTypeSpinner, acroForm);
 
         PDFManager.setCheckboxesInLayout(towLay, acroForm);
         PDFManager.setCheckboxesInLayout(dutyLay, acroForm);
@@ -207,39 +190,77 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         pdfThread.start();
     }
 
-    private static String[][] addApprToViews(String[][] viewArr, String[] addRow){
-        String[][] fieldArr = addApprToViews(viewArr);
-        String[][] outArr = new String[viewArr.length + 1][viewArr[0].length];
-        System.arraycopy(fieldArr, 0, outArr, 0, fieldArr.length);
-        outArr[outArr.length-1] = addRow;
-        return outArr;
-    }
-
-    private static String[][] addApprToViews(String[][] viewArr){
-        String[][] outArr = viewArr.clone();
-        for(String[] arr: outArr){
-            arr[0]= "appr_" + arr[0];
-        }
-        return outArr;
-    }
-
-    private void setupSpinner(Spinner spinner, String[][] arr){
-        fieldMap.put(arr[0][1], new FormFieldHolder(arr[0][1], arr[0][0], arr[1].length));
-    }
-
-    private void populateSpinner(Spinner spinner, String[] strings){
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_dropdown_item, strings);
-        spinner.setAdapter(adapter);
-    }
-
     private void processCheckSpinner(String fieldName, Spinner spinner, PDAcroForm acroForm) throws IOException {
         FormFieldHolder holder = fieldMap.get(fieldName);
         holder.setOutputFromSpinner(spinner);
         PDFManager.setCheckBoxes(acroForm, holder.getFieldArray());
-
     }
 
+    private void processRatingSpinner(String fieldName, Spinner spinner, PDAcroForm acroForm) throws IOException{
+        FormFieldHolder holder = fieldMap.get(fieldName);
+        holder.setOutputFromSpinner(spinner);
+        PDFManager.setTextField(acroForm, fieldName, Integer.toString(5 - holder.selectedIndex));
+    }
+
+    //<editor-fold desc="Static String Arrays">
+    //CheckBox Toggle Fields [Form Checkbox Name, Display String]
+    public static final String[][] towChecks = {
+            //Type of Work
+            {"towAtomic", "Atomic Rad Work"},
+            {"towPlate", "Plate-Work"},
+            {"towBoilers", "Boilers"},
+            {"towConds", "Condensers/Evaporators"},
+            {"towFurnaces", "Furnaces"},
+            {"towExchangers", "Heat Exchangers"},
+            {"towPollution", "Pollution Control"},
+            {"towHydro", "Hydroelectric"},
+            {"towTanks", "Tanks"},
+            {"towTowers", "Towers"}};
+
+    public static final String[][] dutyChecks = {
+            {"dutyBurning", "Burning"},
+            {"dutyWatch", "Confined Space Watch"},
+            {"dutyExpanding", "Expanding"},
+            {"dutyGlass", "Fibreglass"},
+            {"dutyGrinding", "Grinding"},
+            {"dutyLayout", "Layout"},
+            {"dutyMetalizing", "Metalizing"},
+            {"dutyReading", "Reading Drawings"},
+            {"dutyRigging", "Rigging"},
+            {"dutyTack", "Tack Welding"}};
+
+    //Edit Text fields.  [EditText name, PDF form name]
+    public static final String[][] fieldNameEdits = {
+            {"appr_appNameEdit", "aprNameText"},
+            {"appr_appNameEdit", "aprNameText2"},
+            {"appr_regNumEdit", "regNumText"},
+            {"appr_hoursEdit", "hoursText"},
+            {"appr_localNumEdit", "localText"},
+            {"appr_empNameEdit", "empNameText"},
+            {"appr_jobLocationEdit", "jobLocText"},
+            {"appr_jobStewardEdit", "jobStewardText"},
+            {"appr_currentDateEdit", "curDateText"},
+            {"appr_currentDateEdit", "curDateText2"},
+            {"appr_jobStartEdit", "jobStartText"},
+            {"appr_jobEndEdit", "jobEndText"},
+            {"appr_phoneEdit", "phoneText"},
+            {"appr_commentsEdit", "commentsText"}};
+    //[SpinnerName, fieldName(1-4 convention)]
+    //pre-filled [very good, good, average, poor]
+    public static final String[][] ratingSpinners = {
+            {"appr_appraiseSpinner", "appraiseBox"},
+            {"appr_relationSpinner", "relationBox"},
+            {"appr_superRateSpinner", "superBox"},
+            {"appr_journeySpinner", "journeyBox"}};
+    //pre-filled [yes, no, often, rarely, never]
+    public static final String[][] attendSpinners = {
+            {"appr_lateSpinner", "late"},
+            {"appr_absentSpinner", "absent"}};
+    //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
+    public static final String[][] jobSpinnerOptions = {
+            {"projTypeSpinner", "projType"},
+            {"Construction","Maintenance","Demolition", "Shop"}};
+    //</editor-fold>
 
 }
 
