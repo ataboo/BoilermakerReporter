@@ -167,16 +167,12 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
                 try
 
                 {
-                    //Log.w("pdf stuff", "Fields before:");
-                    //PDFManager.printFields(pd);
                     PDAcroForm acroForm = pd.getDocumentCatalog().getAcroForm();
                     Log.w("ApprenticeReportFrag", "StartEdits");
                     pHandler.sendMessage(Message.obtain(pHandler, STARTED_EDITS));
                     editFields(acroForm);
                     Log.w("ApprenticeReportFrag", "DoneEdits");
                     pHandler.sendMessage(Message.obtain(pHandler, DONE_EDITS));
-                    //Log.w("pdf stuff", "Fields after:");
-                   //PDFManager.printFields(pd);
                     outFileFull = PDFManager.savePDF(pd, outputPath, outputFileName);
                     pd.close();
                 } catch ( IOException ie) {

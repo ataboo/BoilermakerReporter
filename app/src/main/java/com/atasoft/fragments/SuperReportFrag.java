@@ -19,11 +19,18 @@ import org.apache.pdfbox.pdmodel.interactive.form.*;
 import java.io.*;
 import java.util.HashMap;
 
+//Superclass for StewardReportFrag as well
 public class SuperReportFrag extends Fragment implements OnClickListener {
 
-    private static final String inputPath = "Files/ApprenticeReportSuper.pdf";
-    private static final String outputFileName = "ApprReportSuper";
-    private static final String outputFolder = "/Documents";
+    private  static final String superInputPath = "Files/ApprenticeReportSuper.pdf";
+    private static final String superOutputFileName = "ApprReportSuper";
+    private static final String stewardInputPath = "Files/ApprenticeReportSteward.pdf";
+    private static final String stewardOutputFileName = "ApprReportSteward";
+
+    private String inputPath = superInputPath;
+    private String outputFileName = superOutputFileName;
+
+    private String outputFolder = "/Documents";
     public static final int PUSHED_BUTTON = 0;
     public static final int STARTED_EDITS = 1;
     public static final int DONE_EDITS = 2;
@@ -84,7 +91,7 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         }
     }
 
-    private void setupViews(){
+    public void setupViews(){
         Button goButton = (Button) thisFrag.findViewById(R.id.pushBootan);
         goButton.setOnClickListener(this);
 
@@ -123,6 +130,19 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         PDFManager.populateWithEdits(thisFrag, towLay, towChecks);
         this.dutyLay = (LinearLayout) thisFrag.findViewById(R.id.dutyCheckLay);
         PDFManager.populateChecks(thisFrag, dutyLay, dutyChecks);
+    }
+
+    public void setToSteward(boolean setSteward){
+        TextView headerTitle = (TextView) thisFrag.findViewById(R.id.reportHeaderLabel);
+        if(headerTitle == null){
+            Log.e("SuperReportFrag", "headerTitle was null when trying to setSteward.");
+            return;
+        }
+
+        int headerID = (setSteward) ? R.string.report_header_steward : R.string.super_header_label;
+        headerTitle.setText(getResources().getString(headerID));
+        outputFileName = setSteward ? stewardOutputFileName : superOutputFileName;
+        inputPath = setSteward ? stewardInputPath : superInputPath;
     }
 
 
@@ -174,30 +194,26 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
                 AssetManager assetMan = context.getAssets();
                 PDDocument pd = PDFManager.loadPDF(inputPath, assetMan);
                 if (pd == null) {
-                    Log.e("pdf stuff", "pd is null, returning");
+                    Log.e("SuperReportFrag", "pd is null, returning");
                     return;
                 }
 
                 try
 
                 {
-                    //Log.w("pdf stuff", "Fields before:");
-                    //PDFManager.printFields(pd);
                     PDAcroForm acroForm = pd.getDocumentCatalog().getAcroForm();
-                    Log.w("pdf stuff", "StartEdits");
+                    Log.w("SuperReportFrag", "StartEdits");
                     pHandler.sendMessage(Message.obtain(pHandler, STARTED_EDITS));
                     editFields(acroForm);
-                    Log.w("pdf stuff", "DoneEdits");
+                    Log.w("SuperReportFrag", "DoneEdits");
                     pHandler.sendMessage(Message.obtain(pHandler, DONE_EDITS));
-                    //Log.w("pdf stuff", "Fields after:");
-                   //PDFManager.printFields(pd);
                     outFileFull = PDFManager.savePDF(pd, outputPath, outputFileName);
                     pd.close();
                 } catch ( IOException ie) {
                     ie.printStackTrace();
-                    Log.e("pdf stuff", ie.toString());
+                    Log.e("SuperReportFrag", ie.toString());
                 }
-                Log.w("pdf stuff", "DoneSave");
+                Log.w("SuperReportFrag", "DoneSave");
                 pHandler.sendMessage(Message.obtain(pHandler, DONE_SAVE));
             }
         };
@@ -282,7 +298,6 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
             {"absentSpinner", "absent"},
             {"lateSpinner", "late"}};
     //</editor-fold>
-
 }
 
 

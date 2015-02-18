@@ -12,7 +12,7 @@
         android:layout_height="fill_parent">
 
         <TextView
-            android:id="@+id/reportTypeSpinLabel"
+            android:id="@+id/reportHeaderLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -26,7 +26,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_height="1dp"
-            android:layout_below="@id/reportTypeSpinLabel"
+            android:layout_below="@id/reportHeaderLabel"
             android:background="@android:color/darker_gray"/>
         <!--===============String Fields=================-->
         <TextView

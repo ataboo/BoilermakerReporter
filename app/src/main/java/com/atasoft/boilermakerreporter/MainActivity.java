@@ -12,16 +12,18 @@ import android.widget.Toast;
 
 import com.atasoft.fragments.*;
 
-//TODO: fix logs, email intent, permanence maybe?
+//TODO: email intent, read existing file
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
 
     public static final int SUPER_LAUNCH = 0;
     public static final int APPRENTICE_LAUNCH = 1;
+    public static final int STEWARD_LAUNCH = 2;
 
     private Fragment superFrag;
     private Fragment apprenticeFrag;
+    private Fragment stewardFrag;
     private ActionBar actionBar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +33,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
         setContentView(R.layout.activity_main);
         //check both just for giggles
-        if(superFrag == null || apprenticeFrag == null){
+        if(superFrag == null){
             superFrag = new SuperReportFrag();
             apprenticeFrag = new ApprenticeReportFrag();
+            stewardFrag = new StewardReportFrag();
             this.actionBar = getSupportActionBar();
             if(actionBar!=null) initActionBar(launchMode);
         }
@@ -45,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(actionBar.getThemedContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1,new String[]{"Supervisor Report", "Apprentice Report"});
+                android.R.layout.simple_list_item_1, android.R.id.text1,new String[]{"Supervisor Report", "Apprentice Report", "Job Steward Report"});
         actionBar.setListNavigationCallbacks(adapter, this);
         actionBar.setSelectedNavigationItem(launchMode);
     }
@@ -79,14 +82,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     }
 
     private void swapFrag(int launchMode) {
-        Fragment activeFrag;
+        Fragment activeFrag = superFrag;
         switch (launchMode) {
-            default:
+            case SUPER_LAUNCH:
                 activeFrag = superFrag;
                 break;
             case APPRENTICE_LAUNCH:
                 activeFrag = apprenticeFrag;
                 break;
+            case STEWARD_LAUNCH:
+                activeFrag = stewardFrag;
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.container, activeFrag).commit();
     }

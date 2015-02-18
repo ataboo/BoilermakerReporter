@@ -33,7 +33,7 @@ public class PDFManager {
             return pd;
         } catch(IOException ie){
             ie.printStackTrace();
-            Log.w("pdf stuff", ie.toString());
+            Log.w("PDFManager", ie.toString());
             return null;
         }
     }
@@ -60,7 +60,7 @@ public class PDFManager {
 
         } catch (IOException ex) {
             ex.printStackTrace();
-            Log.e("pdf stuff", ex.toString());
+            Log.e("PDFManager", ex.toString());
         }
         return dir+"/"+fileName;
     }
@@ -128,11 +128,9 @@ public class PDFManager {
                     if(childView instanceof TextView) {
                         if (childView instanceof EditText) {
                             editTextValue = ((EditText) childView).getText().toString();
-                            Log.w("PDFManager", "set editTextValue to:" + editTextValue);
                         } else {
                             if(childView.getTag() != null) {
                                 labelTag = ((TextView) childView).getTag().toString();
-                                Log.w("PDFManager", "set labelTag to: " + labelTag);
                             }
                         }
                     }
@@ -215,50 +213,6 @@ public class PDFManager {
         context.getResources();
         int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dips,
                 context.getResources().getDisplayMetrics());
-        Log.w("PDFManager", "Converted " + dips + " to " + pixels);
         return pixels;
     }
-
-    //make these with ctrl-alt-T
-    //<editor-fold desc="Old Functions">
-/*
-    public static void printFields(PDDocument pd) throws IOException {
-        PDDocumentCatalog docCatalog = pd.getDocumentCatalog();
-        PDAcroForm acroForm = docCatalog.getAcroForm();
-        List fields = acroForm.getFields();
-        Iterator fieldsIter = fields.iterator();
-
-        Log.w("pdf stuff", new Integer(fields.size()).toString() + " top-level fields were found on the form");
-
-        while( fieldsIter.hasNext()) {
-            PDField field = (PDField)fieldsIter.next();
-            processField(field, "|--", field.getPartialName());
-        }
-    }
-    private static void processField(PDField field, String sLevel, String sParent) throws IOException
-    {
-        List kids = field.getKids();
-        if(kids != null) {
-            Iterator kidsIter = kids.iterator();
-            if(!sParent.equals(field.getPartialName())) {
-                sParent = sParent + "." + field.getPartialName();
-            }
-
-            Log.w("pdf stuff", sLevel + sParent);
-
-            while(kidsIter.hasNext()) {
-                Object pdfObj = kidsIter.next();
-                if(pdfObj instanceof PDField) {
-                    PDField kid = (PDField)pdfObj;
-                    processField(kid, "|  " + sLevel, sParent);
-                }
-            }
-        }
-        else {
-            String outputString = sLevel + sParent + "." + field.getPartialName() + ",  type=" + field.getClass().getName() + ", value= " + field.getValue();
-            Log.w("pdf stuff", outputString);
-        }
-    }*/
-    //</editor-fold>
-
 }

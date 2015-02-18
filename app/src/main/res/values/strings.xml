@@ -54,6 +54,8 @@
     <string name="appr_absent_label">Were you ever absent?</string>
     <string name="appr_hours_label">Total Hours Worked:</string>
 
+    <string name="report_header_steward">Apprentice Report (Job Steward):</string>
+
     <string-array name="eval_spinner_ratings">
         <item>Excellent</item>
         <item>Above Average</item>
