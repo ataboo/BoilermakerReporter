@@ -22,15 +22,15 @@ import java.util.HashMap;
 //Superclass for StewardReportFrag as well
 public class SuperReportFrag extends Fragment implements OnClickListener {
 
-    private  static final String superInputPath = "Files/ApprenticeReportSuper.pdf";
-    private static final String superOutputFileName = "ApprReportSuper";
+    private static final String superInputPath = "Files/ApprenticeReportSuper.pdf";
+    public static final String superOutputFileName = "ApprReportSuper";
     private static final String stewardInputPath = "Files/ApprenticeReportSteward.pdf";
-    private static final String stewardOutputFileName = "ApprReportSteward";
+    public static final String stewardOutputFileName = "ApprReportSteward";
 
     private String inputPath = superInputPath;
     private String outputFileName = superOutputFileName;
 
-    private String outputFolder = "/Documents";
+
     public static final int PUSHED_BUTTON = 0;
     public static final int STARTED_EDITS = 1;
     public static final int DONE_EDITS = 2;
@@ -188,7 +188,7 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         final Thread pdfThread = new Thread(){
             @Override
             public void run() {
-                String outputPath = Environment.getExternalStorageDirectory().toString() + outputFolder;
+                String outputPath = Environment.getExternalStorageDirectory().toString() + PDFManager.outputFolder;
                 File outDir = new File(outputPath);
                 outDir.mkdirs();
                 AssetManager assetMan = context.getAssets();
@@ -207,7 +207,7 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
                     editFields(acroForm);
                     Log.w("SuperReportFrag", "DoneEdits");
                     pHandler.sendMessage(Message.obtain(pHandler, DONE_EDITS));
-                    outFileFull = PDFManager.savePDF(pd, outputPath, outputFileName);
+                    outFileFull = PDFManager.savePDF(pd, outputFileName);
                     pd.close();
                 } catch ( IOException ie) {
                     ie.printStackTrace();

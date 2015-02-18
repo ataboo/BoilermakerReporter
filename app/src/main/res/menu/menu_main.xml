@@ -8,8 +8,12 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
     -->
+    <item android:id="@+id/action_openFile"
+        android:title="Open..."
+        android:orderInCategory="1"
+        android:showAsAction="never"/>
     <item android:id="@+id/action_about"
         android:title="@string/action_about"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         app:showAsAction="never" />
 </menu>

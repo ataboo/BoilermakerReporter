@@ -4,6 +4,8 @@ package com.atasoft.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.os.Environment;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
@@ -15,7 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.atasoft.boilermakerreporter.MainActivity;
 import com.atasoft.boilermakerreporter.R;
+import com.atasoft.fragments.ApprenticeReportFrag;
+import com.atasoft.fragments.SuperReportFrag;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -23,8 +28,17 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDCheckbox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDFieldTreeNode;
 
 import java.io.*;
-
+import java.util.ArrayList;
 public class PDFManager {
+    public static final String outputFolder = "/Documents/BMReporter";
+    public static final String root = Environment.getExternalStorageDirectory().toString();
+    public static final String outputPath = root + outputFolder;
+    public static final String saveTagField = "projType1";
+
+    public static final int NOT_REPORT_PDF = -1;
+    public static final int SUPER_LAUNCH = 0;
+    public static final int APPRENTICE_LAUNCH = 1;
+    public static final int STEWARD_LAUNCH = 2;
     public static PDDocument loadPDF(String filePath, AssetManager assetMan){
         try{
             InputStream input = assetMan.open(filePath);
@@ -38,31 +52,42 @@ public class PDFManager {
         }
     }
 
-    public static String savePDF(PDDocument pd, String dir, String fileName){
-        File saveFile = new File(dir, fileName + ".pdf");
+    public static String savePDF(PDDocument pd, String fileName){
+        String fileNameChanged = fileName;
+        File outDir = new File(outputPath);
+        outDir.mkdirs();
+        File saveFile = new File(outputPath, fileNameChanged + ".pdf");
         if(saveFile.exists()) {
             int nameIncrement = 1;
             while (nameIncrement < 1000) {
-                fileName = fileName + "_" + Integer.toString(nameIncrement);
-                saveFile = new File(dir, fileName + ".pdf");
+                fileNameChanged = fileNameChanged + "_" + Integer.toString(nameIncrement);
+                saveFile = new File(outputPath, fileNameChanged + ".pdf");
                 if(!saveFile.exists()) break;
-                fileName = fileName.split("_")[0];
+                fileNameChanged = fileNameChanged.split("_")[0];
                 nameIncrement++;
             }
-
         }
-        fileName = fileName+".pdf";
+
+        //Tags white text box for comparison when loading files that have been edited.
+        try {
+            setTextField(pd.getDocumentCatalog().getAcroForm(), "typeTag", fileName);
+        } catch (IOException ie){
+            Log.e("PDFManager", "IOException when trying to tag typeTag");
+            ie.printStackTrace();
+        }
+
+        fileNameChanged = fileNameChanged+".pdf";
         try{
             FileOutputStream outStr = new FileOutputStream(saveFile);
             pd.save(outStr);
             outStr.flush();
             outStr.close();
-
+            pd.close();
         } catch (IOException ex) {
             ex.printStackTrace();
             Log.e("PDFManager", ex.toString());
         }
-        return dir+"/"+fileName;
+        return outputPath+"/"+fileNameChanged;
     }
 
     public static void setTextField(PDAcroForm acroForm, String name, String value) throws IOException {
@@ -214,5 +239,82 @@ public class PDFManager {
         int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dips,
                 context.getResources().getDisplayMetrics());
         return pixels;
+    }
+
+    public static String[][] getSavedFiles(AssetManager assetManager){
+        File folder = new File(outputPath);
+        ArrayList<String> fileCandidates = new ArrayList<String>();
+        ArrayList<String> fileTypes = new ArrayList<String>();
+        for(File fileEntry :  folder.listFiles()) {
+            if (fileEntry.isFile()) {
+                int reportType = getReportType(fileEntry, assetManager);
+                if (reportType != NOT_REPORT_PDF) {
+                    fileCandidates.add(fileEntry.getName());
+                    fileTypes.add(getStringFromFileCode(reportType));
+                }
+            }
+        }
+
+        String[][] outArr = new String[2][fileCandidates.size()];
+        outArr[0] = fileCandidates.toArray(outArr[0]);
+        outArr[1] = fileTypes.toArray(outArr[1]);
+        return outArr;
+    }
+
+
+    public static int getReportType(File pdfFile, AssetManager assetManager){
+        String tagString = "fail";
+        PDDocument pd = openPDFFromResources(pdfFile);
+        if(pd == null) return NOT_REPORT_PDF;
+
+        try{
+            PDFieldTreeNode typeField = pd.getDocumentCatalog().getAcroForm().getField("typeTag");
+            if(typeField == null){
+                Log.w("PDFManager", "got null from typeTag field on: " + pdfFile.getName());
+                pd.close();
+                return NOT_REPORT_PDF;
+            }
+            tagString = typeField.getValue().toString();
+            Log.w("PDFManager", "got: " + tagString + " from: " + pdfFile.getName());
+            pd.close();
+        } catch (IOException ie){
+            Log.w("PDFManager", "typeTag IOError.");
+            return  NOT_REPORT_PDF;
+        }
+        return tagString.matches(SuperReportFrag.stewardOutputFileName) ? STEWARD_LAUNCH :
+                tagString.matches(SuperReportFrag.superOutputFileName) ? SUPER_LAUNCH :
+                        tagString.matches(ApprenticeReportFrag.outputFileName) ? APPRENTICE_LAUNCH :
+                                NOT_REPORT_PDF;
+    }
+
+    public static PDDocument openPDFFromResources(File pdfFile){
+        if(!pdfFile.exists()) return null;
+        FileInputStream fStream = null;
+        try {
+            fStream = new FileInputStream(pdfFile);
+        } catch (FileNotFoundException fnfe){
+            fnfe.printStackTrace();
+        }
+        try{
+            PDDocument pd = PDDocument.load(fStream);
+            fStream.close();
+            return pd;
+        } catch(IOException ie){
+            ie.printStackTrace();
+            Log.w("PDFManager", "Error loading PDDocument from " + pdfFile.getName());
+            return null;
+        }
+    }
+
+    public static String getStringFromFileCode(int code){
+        switch(code){
+            case SUPER_LAUNCH:
+                return "Supervisor";
+            case APPRENTICE_LAUNCH:
+                return "Apprentice";
+            case STEWARD_LAUNCH:
+                return "Steward";
+        }
+        return "Not Valid File";
     }
 }

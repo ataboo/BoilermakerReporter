@@ -1,5 +1,7 @@
 package com.atasoft.boilermakerreporter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.*;
 import android.support.v4.app.*;
@@ -8,18 +10,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.*;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.atasoft.fragments.*;
+import com.atasoft.utils.PDFManager;
 
 //TODO: email intent, read existing file
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
 
-    public static final int SUPER_LAUNCH = 0;
-    public static final int APPRENTICE_LAUNCH = 1;
-    public static final int STEWARD_LAUNCH = 2;
+    public static final int SUPER_LAUNCH = PDFManager.SUPER_LAUNCH;
+    public static final int APPRENTICE_LAUNCH = PDFManager.APPRENTICE_LAUNCH;
+    public static final int STEWARD_LAUNCH = PDFManager.STEWARD_LAUNCH;
 
     private Fragment superFrag;
     private Fragment apprenticeFrag;
@@ -72,6 +76,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             case R.id.action_about:
                 openAbout();
                 return true;
+            case R.id.action_openFile:
+                openFileDialog();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -100,6 +107,35 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         swapFrag(itemPosition);
         return true;
+    }
+
+    public void openFileDialog(){
+        final AlertDialog.Builder dBuilder = new AlertDialog.Builder(this);
+        dBuilder.setTitle("Open Report:");
+        String[][] fileStrings = PDFManager.getSavedFiles(getAssets());
+        Log.w("MainActivity", fileStrings.length + ",  " + fileStrings[0].length);
+        String[] itemStrings = new String[fileStrings[0].length];
+        for(int i=0; i<itemStrings.length; i++){
+            itemStrings[i] = fileStrings[0][i] + " - " + fileStrings[1][i];
+        }
+        if (itemStrings.length > 0) {
+            dBuilder.setItems(itemStrings, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            dBuilder.setMessage("No previous PDF report files found in:\n" + PDFManager.outputPath);
+        }
+
+        dBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "You clicked ok bitch", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dBuilder.create().show();
     }
 }
 

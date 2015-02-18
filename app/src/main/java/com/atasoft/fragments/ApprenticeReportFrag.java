@@ -34,8 +34,7 @@ import java.util.HashMap;
 public class ApprenticeReportFrag extends Fragment implements OnClickListener {
 
     private static final String inputPath = "Files/ApprenticeReportAppr.pdf";
-    private static final String outputFileName = "ApprReportApprentice";
-    private static final String outputFolder = "/Documents";
+    public static final String outputFileName = "ApprReportApprentice";
     public static final int PUSHED_BUTTON = 0;
     public static final int STARTED_EDITS = 1;
     public static final int DONE_EDITS = 2;
@@ -154,9 +153,6 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         final Thread pdfThread = new Thread(){
             @Override
             public void run() {
-                String outputPath = Environment.getExternalStorageDirectory().toString() + outputFolder;
-                File outDir = new File(outputPath);
-                outDir.mkdirs();
                 AssetManager assetMan = context.getAssets();
                 PDDocument pd = PDFManager.loadPDF(inputPath, assetMan);
                 if (pd == null) {
@@ -173,7 +169,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
                     editFields(acroForm);
                     Log.w("ApprenticeReportFrag", "DoneEdits");
                     pHandler.sendMessage(Message.obtain(pHandler, DONE_EDITS));
-                    outFileFull = PDFManager.savePDF(pd, outputPath, outputFileName);
+                    outFileFull = PDFManager.savePDF(pd, outputFileName);
                     pd.close();
                 } catch ( IOException ie) {
                     ie.printStackTrace();
