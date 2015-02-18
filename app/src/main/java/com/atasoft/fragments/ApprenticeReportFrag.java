@@ -34,7 +34,7 @@ import java.util.HashMap;
 public class ApprenticeReportFrag extends Fragment implements OnClickListener {
 
     private static final String inputPath = "Files/ApprenticeReportAppr.pdf";
-    private static final String outputFileName = "ApprReport_Apprentice";
+    private static final String outputFileName = "ApprReportApprentice";
     private static final String outputFolder = "/Documents";
     public static final int PUSHED_BUTTON = 0;
     public static final int STARTED_EDITS = 1;
@@ -117,7 +117,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
                 fieldMap.put(arr[1], new FormFieldHolder(arr[1], arr[0], 5));
             }
             fieldMap.put(jobSpinnerOptions[0][1],
-                    new FormFieldHolder(jobSpinnerOptions[0][1], jobSpinnerOptions[0][0]));
+                    new FormFieldHolder(jobSpinnerOptions[0][1], jobSpinnerOptions[0][0], 4));
         }
         this.jobTypeSpinner = (Spinner) thisFrag.findViewById(R.id.appr_jobTypeSpinner);
 

@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class SuperReportFrag extends Fragment implements OnClickListener {
 
     private static final String inputPath = "Files/ApprenticeReportSuper.pdf";
-    private static final String outputFileName = "ApprReport_Super";
+    private static final String outputFileName = "ApprReportSuper";
     private static final String outputFolder = "/Documents";
     public static final int PUSHED_BUTTON = 0;
     public static final int STARTED_EDITS = 1;
@@ -93,74 +93,71 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         //fieldMap stores the non-checkbox fields as <(String) fieldName from pdf, (FormFieldHolder)>
         if(fieldMap == null) {
             fieldMap = new HashMap<String, FormFieldHolder>();
-            for(String[] fieldName: FormFieldHolder.fieldNameEdits) {
+            for(String[] fieldName: fieldNameEdits) {
                 fieldMap.put(fieldName[1],
                         new FormFieldHolder(fieldName[1], fieldName[0]));
             }
-            for(String[] rating: FormFieldHolder.ratingSpinners){
+            for(String[] fieldName: ratingCommentFieldNames){
+                fieldMap.put(fieldName[1],
+                        new FormFieldHolder(fieldName[1], fieldName[0]));
+            }
+
+            for(String[] rating: ratingSpinners){
                 fieldMap.put(rating[0],
                         new FormFieldHolder(rating[1], rating[0], 5));
             }
-            for(String[] rating: FormFieldHolder.attendanceSpinners){
+            for(String[] rating: attendanceSpinners){
                 fieldMap.put(rating[0],
                         new FormFieldHolder(rating[1], rating[0], 3));
             }
 
             this.jobTypeSpinner = (Spinner) thisFrag.findViewById(R.id.jobTypeSpinner);
 
-            fieldMap.put(FormFieldHolder.jobTypeSpinnerOptions[0][1],
-                    new FormFieldHolder(FormFieldHolder.jobTypeSpinnerOptions[0][1],
-                    FormFieldHolder.jobTypeSpinnerOptions[0][0],
-                    FormFieldHolder.jobTypeSpinnerOptions[1].length));
-
-            this.ratingSpinner = (Spinner) thisFrag.findViewById(R.id.ratingSpinner);
-            populateSpinner(ratingSpinner, FormFieldHolder.ratingSpinnerOptions[1]);
-
-            fieldMap.put(FormFieldHolder.ratingSpinnerOptions[0][1],
-                    new FormFieldHolder(FormFieldHolder.ratingSpinnerOptions[0][1],
-                    FormFieldHolder.ratingSpinnerOptions[0][0],
-                    FormFieldHolder.ratingSpinnerOptions[1].length));
-
+            fieldMap.put(jobTypeSpinnerOptions[0][1],
+                    new FormFieldHolder(jobTypeSpinnerOptions[0][1],
+                            jobTypeSpinnerOptions[0][0],
+                            jobTypeSpinnerOptions[1].length));
         }
 
         this.towLay = (LinearLayout) thisFrag.findViewById(R.id.towCheckLay);
-        PDFManager.populateChecks(thisFrag, towLay, FormFieldHolder.towChecks);
+        PDFManager.populateWithEdits(thisFrag, towLay, towChecks);
         this.dutyLay = (LinearLayout) thisFrag.findViewById(R.id.dutyCheckLay);
-        PDFManager.populateChecks(thisFrag, dutyLay, FormFieldHolder.dutyChecks);
+        PDFManager.populateChecks(thisFrag, dutyLay, dutyChecks);
     }
 
 
 
     private void editFields(PDAcroForm acroForm) throws IOException{
-        for(String[] fieldName : FormFieldHolder.fieldNameEdits){
+
+        for(String[] fieldName : fieldNameEdits){
+            FormFieldHolder holder = fieldMap.get(fieldName[1]);
+            holder.setOutputFromEdit((EditText) PDFManager.getViewByName(holder.viewName, thisFrag));
+            PDFManager.setTextField(acroForm, fieldName[1], holder.outputString);
+        }
+        for(String[] fieldName : ratingCommentFieldNames){
             FormFieldHolder holder = fieldMap.get(fieldName[1]);
             holder.setOutputFromEdit((EditText) PDFManager.getViewByName(holder.viewName, thisFrag));
             PDFManager.setTextField(acroForm, fieldName[1], holder.outputString);
         }
 
-        for(String[] fieldName : FormFieldHolder.ratingSpinners){
+        for(String[] fieldName : ratingSpinners){
+            FormFieldHolder holder = fieldMap.get(fieldName[0]);
+            holder.setOutputFromSpinner((Spinner) PDFManager.getViewByName(holder.viewName, thisFrag));
+            PDFManager.setTextField(acroForm, holder.fieldName, Integer.toString(5 - holder.selectedIndex));
+        }
+
+        for(String[] fieldName : attendanceSpinners){
             FormFieldHolder holder = fieldMap.get(fieldName[0]);
             holder.setOutputFromSpinner((Spinner) PDFManager.getViewByName(holder.viewName, thisFrag));
             String[][] fieldArr = holder.getFieldArray();
-            PDFManager.setTextFields(acroForm, fieldArr);
+            PDFManager.setCheckBoxes(acroForm, fieldArr);
         }
 
-        for(String[] fieldName : FormFieldHolder.attendanceSpinners){
-            FormFieldHolder holder = fieldMap.get(fieldName[0]);
-            holder.setOutputFromSpinner((Spinner) PDFManager.getViewByName(holder.viewName, thisFrag));
-            String[][] fieldArr = holder.getFieldArray();
-            PDFManager.setTextFields(acroForm, fieldArr);
-        }
-
-        FormFieldHolder holder = fieldMap.get(FormFieldHolder.jobTypeSpinnerOptions[0][1]);
+        FormFieldHolder holder = fieldMap.get(jobTypeSpinnerOptions[0][1]);
         holder.setOutputFromSpinner(jobTypeSpinner);
         PDFManager.setCheckBoxes(acroForm, holder.getFieldArray());
 
-        holder = fieldMap.get(FormFieldHolder.ratingSpinnerOptions[0][1]);
-        holder.setOutputFromSpinner(ratingSpinner);
-        PDFManager.setCheckBoxes(acroForm, holder.getFieldArray());
-
-        PDFManager.setCheckboxesInLayout(towLay, acroForm);
+        PDFManager.setEditsInLayout(towLay, acroForm);
         PDFManager.setCheckboxesInLayout(dutyLay, acroForm);
     }
 
@@ -214,6 +211,77 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         adapter.notifyDataSetChanged();
     }
 
+    //make these with ctrl-alt-T
+    //<editor-fold desc="Static fieldStrings">
+    //CheckBox Toggle Fields [Form Checkbox Name, Display String]
+    public static final String[][] towChecks = {
+            //Type of Work
+            {"towAtomic", "Atomic Rad Work"},
+            {"towPlate", "Plate-Work"},
+            {"towBoilers", "Boilers"},
+            {"towConds", "Condensers/Evaporators"},
+            {"towFurnaces", "Furnaces"},
+            {"towExchangers", "Heat Exchangers"},
+            {"towPollution", "Pollution Control"},
+            {"towHydro", "Hydroelectric"},
+            {"towTanks", "Tanks"},
+            {"towTowers", "Towers"}};
+
+    public static final String[][] dutyChecks = {
+            {"dutyBurning", "Burning"},
+            {"dutyWatch", "Confined Space Watch"},
+            {"dutyExpanding", "Expanding"},
+            {"dutyGlass", "Fibreglass"},
+            {"dutyGrinding", "Grinding"},
+            {"dutyLayout", "Layout"},
+            {"dutyMetalizing", "Metalizing"},
+            {"dutyReading", "Reading Drawings"},
+            {"dutyRigging", "Rigging"},
+            {"dutyTack", "Tack Welding"}};
+
+    //Edit Text fields.  [EditText name, PDF form name]
+    public static final String[][] fieldNameEdits = {
+            {"appNameEdit", "aprNameText"},
+            {"empNumberEdit", "empNumText"},
+            {"localNumEdit", "localText"},
+            {"empNameEdit", "empNameText"},
+            {"jobLocationEdit", "jobLocText"},
+            {"jobStewardEdit", "jobStewardText"},
+            {"currentDateEdit", "curDateText"},
+            {"jobStartEdit", "jobStartText"},
+            {"jobEndEdit", "jobEndText"},
+            {"absentEdit", "absentText"},
+            {"lateEdit", "lateText"},
+            {"superNameEdit", "superNameText"},
+            {"commentsEdit", "commentsText"}};
+    //[EditText name, PDFField name]
+    public static final String[][] ratingCommentFieldNames = {
+            {"safetyComsEdit", "safeAttTextCom"},
+            {"workerComsEdit", "workAttTextCom"},
+            {"jobComsEdit", "jobAttTextCom"},
+            {"initComsEdit","initTextCom"},
+            {"capComsEdit","capTextCom"},
+            {"ratingComsEdit","ratingTextCom"}};
+
+    //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
+    public static final String[][] jobTypeSpinnerOptions = {
+            {"projTypeSpinner", "projType"},
+            {"Construction","Maintenance","Demolition", "Shop"}};
+
+    //Rating Excellent, Above Average, Average, Below Average, Unsatisfactory [Spinner View name, textfield name 1-5]
+    public static final String[][] ratingSpinners = {
+            {"safetySpinner", "safeAttText"},
+            {"workerSpinner", "workAttText"},
+            {"jobSpinner", "jobAttText"},
+            {"initSpinner", "initText"},
+            {"capSpinner", "capText"},
+            {"ratingSpinner", "ratingText"}};
+
+    //Rating 1-3
+    public static final String[][] attendanceSpinners = {
+            {"absentSpinner", "absent"},
+            {"lateSpinner", "late"}};
+    //</editor-fold>
 
 }
 

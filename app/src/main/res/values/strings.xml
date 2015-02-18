@@ -19,25 +19,28 @@
     <string name="local_number_label">Your Local Number:</string>
     <string name="employer_name_label">Employer Name:</string>
     <string name="current_date_label">Current Date:</string>
-    <string name="job_start_label">Job Start:</string>
-    <string name="job_completion_label">Job End:</string>
+    <string name="job_start_label">Employment Start:</string>
+    <string name="job_completion_label">Employment End:</string>
     <string name="job_location_label">Job Location:</string>
     <string name="job_steward_label">Job Steward:</string>
     <string name="super_name_label">Supervisor Name:</string>
     <string name="job_type_label">Job Type:</string>
     <string name="duty_header_label">Duties:</string>
     <string name="tow_header_label">Type of Work:</string>
+    <string name="tow_header_hours">Typd of Work (hrs):</string>
     <string name="safety_spinner_label">Attitude to Safety</string>
     <string name="worker_spinner_label">Attitude to Co-Workers</string>
     <string name="job_spinner_label">Attitude to Job</string>
     <string name="init_spinner_label">Initiative</string>
     <string name="cap_spinner_label">Capability</string>
-    <string name="rating_spinner_label">Overall Ability</string>
+    <string name="rating_spinner_label">Overall Rating</string>
     <string name="absent_spinner_label">Absent</string>
     <string name="absent_edit_label">Number of Times:</string>
     <string name="late_spinner_label">Late</string>
     <string name="late_edit_label">Number of Times:</string>
     <string name="comment_edit_label">Comments:</string>
+    <string name="emp_number_label">Employee Number:</string>
+    <string name="local_appr_number_label">Apprentice\'s Local:</string>
 
     <string name="button_submit">Submit</string>
 
@@ -66,8 +69,8 @@
 
     <string-array name="attendance_spinner_ratings">
         <item>Never</item>
-        <item>Rarely</item>
         <item>Often</item>
+        <item>Rarely</item>
     </string-array>
 
     <string-array name="appr_attendance_spinner">

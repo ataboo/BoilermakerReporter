@@ -79,6 +79,7 @@ public class FormFieldHolder {
         return outArr;
     }
 
+    /*
     //<editor-fold desc="Field Name Arrays">
     //===============================Common Fields====================================
     //CheckBox Toggle Fields [Form Checkbox Name, Display String]
@@ -133,15 +134,6 @@ public class FormFieldHolder {
             {"superNameEdit", "superName"},
             {"commentsEdit", "commentsText"}};
 
-    //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
-    public static final String[][] jobTypeSpinnerOptions = {
-            {"projTypeSpinner", "projType"},
-            {"Construction","Maintenance","Demolition", "Shop"}};
-
-    //CheckBox/Spinner Fields.  [Spinner View, PDF box, display name 1, PDF box2 name, ...]
-    public static final String[][] ratingSpinnerOptions = {
-            {"ratingSpinner", "rating"},
-            {"As good as a Journeyman", "Needs more experience", "Below average"}};
     //Rating Excellent, Above Average, Average, Below Average, Unsatisfactory [Spinner View name, textfield name 1-5]
     public static final String[][] ratingSpinners = {
             {"safetySpinner", "safetyBox"},
@@ -154,7 +146,7 @@ public class FormFieldHolder {
     public static final String[][] attendanceSpinners = {
             {"absentSpinner", "absBox"},
             {"lateSpinner", "lateBox"}};
-
+*/
 
 
     //---Apprentice----
@@ -162,6 +154,14 @@ public class FormFieldHolder {
     //regNumText, localText, hoursText, appraiseBox, relationBox, superBox, journeyBox
     //Removed
     // Sin Number, ratio
+
+    //---Super---
+    //New ones
+    //empNumText, superNameText
+    //localText, localNumEdit
+    // safeAttText, workAttText, jobAttText, initText, capText, ratingText, all the coms
+    //late1-3, absent1-3, absentText, lateText
+
 
     //</editor-fold
 }
