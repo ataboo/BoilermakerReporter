@@ -6,6 +6,7 @@ import com.atasoft.utils.*;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.*;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.app.*;
 import android.util.Log;
@@ -51,10 +52,18 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
                              Bundle savedInstanceState) {
 
        View v = inflater.inflate(R.layout.super_report, container, false);
-        thisFrag = v;
-        this.context = v.getContext();
-        setupViews();
+        //thisFrag = getView();
+        //this.context = v.getContext();
+        //setupViews();
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        this.thisFrag = getView();
+        this.context = thisFrag.getContext();
+        setupViews();
+        super.onViewCreated(view, savedInstanceState);
     }
 
     //<editor-fold desc="pHandler">

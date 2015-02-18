@@ -122,14 +122,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
         switch (reportType){
             case SUPER_LAUNCH:
+                swapFrag(SUPER_LAUNCH);
                 superFrag.loadPDFtoViews(pdDoc);
                 break;
             case APPRENTICE_LAUNCH:
+                swapFrag(APPRENTICE_LAUNCH);
                 //apprenticeFrag.loadPDFtoViews(pdDoc);
                 break;
             case STEWARD_LAUNCH:
-                //No real difference to super just title changes
-                superFrag.loadPDFtoViews(pdDoc);
+                swapFrag(STEWARD_LAUNCH);
+                stewardFrag.loadPDFtoViews(pdDoc);
                 break;
             default:
                 break;

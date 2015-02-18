@@ -312,11 +312,6 @@ public class PDFManager {
                 String[] fileSplit = fileEntry.getName().split("\\.");
                 if(fileSplit.length > 1 && fileSplit[fileSplit.length -1].matches("pdf"))
                         filesArr.add(fileEntry);
-                Log.w("PDFManager", fileEntry.getName() + " came out as: " +
-                        (fileSplit.length > 1 && fileSplit[fileSplit.length -1].matches("pdf")));
-                Log.w("PDFManager", "Split is: " + fileEntry.getName().split("\\.").length);
-                //Log.w("PDFManager", "fileSplit length is: " + fileSplit.length + " last match is: " +
-                        //fileSplit[fileSplit.length -1].matches("pdf"));
             }
         }
         File[] outArr = new File[filesArr.size()];
@@ -337,12 +332,11 @@ public class PDFManager {
         try{
             PDFieldTreeNode typeField = pdDoc.getDocumentCatalog().getAcroForm().getField("typeTag");
             if(typeField == null){
-                Log.w("PDFManager", "got null from typeTag field from: " + fileName);
+                Log.e("PDFManager", "got null from typeTag field from: " + fileName);
                 pdDoc.close();
                 return NOT_REPORT_PDF;
             }
             tagString = typeField.getValue().toString();
-            Log.w("PDFManager", "got: " + tagString + " from: " + fileName);
             pdDoc.close();
         } catch (IOException ie){
             Log.w("PDFManager", "typeTag IOError.");
