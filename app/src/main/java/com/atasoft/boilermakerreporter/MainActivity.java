@@ -16,6 +16,10 @@ import android.widget.Toast;
 import com.atasoft.fragments.*;
 import com.atasoft.utils.PDFManager;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+
+import java.io.File;
+
 //TODO: email intent, read existing file
 
 
@@ -25,9 +29,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
     public static final int APPRENTICE_LAUNCH = PDFManager.APPRENTICE_LAUNCH;
     public static final int STEWARD_LAUNCH = PDFManager.STEWARD_LAUNCH;
 
-    private Fragment superFrag;
-    private Fragment apprenticeFrag;
-    private Fragment stewardFrag;
+    private SuperReportFrag superFrag;
+    private ApprenticeReportFrag apprenticeFrag;
+    private StewardReportFrag stewardFrag;
     private ActionBar actionBar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,19 +113,50 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         return true;
     }
 
+    private void loadToFragment(File pdfFile){
+        PDDocument pdDoc = PDFManager.openPDFFromResources(pdfFile);
+        if(pdfFile == null){
+            fileFailToast(pdfFile.getName());
+        }
+        int reportType = PDFManager.getReportType(pdDoc, pdfFile.getName());
+
+        switch (reportType){
+            case SUPER_LAUNCH:
+                superFrag.loadPDFtoViews(pdDoc);
+                break;
+            case APPRENTICE_LAUNCH:
+                //apprenticeFrag.loadPDFtoViews(pdDoc);
+                break;
+            case STEWARD_LAUNCH:
+                //No real difference to super just title changes
+                superFrag.loadPDFtoViews(pdDoc);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void fileFailToast(String fileName){
+        String failToast = fileName + " is not valid or was not made with Reporter.";
+        Toast.makeText(this, failToast, Toast.LENGTH_LONG).show();
+        Log.w("MainActivity", failToast);
+    }
+
     public void openFileDialog(){
         final AlertDialog.Builder dBuilder = new AlertDialog.Builder(this);
         dBuilder.setTitle("Open Report:");
-        String[][] fileStrings = PDFManager.getSavedFiles(getAssets());
-        Log.w("MainActivity", fileStrings.length + ",  " + fileStrings[0].length);
-        String[] itemStrings = new String[fileStrings[0].length];
-        for(int i=0; i<itemStrings.length; i++){
-            itemStrings[i] = fileStrings[0][i] + " - " + fileStrings[1][i];
+
+        final File[] fileArr = PDFManager.getSavedFiles();
+        String[] fileStrings = new String[fileArr.length];
+
+        for(int i=0; i<fileArr.length; i++){
+            fileStrings[i] = fileArr[i].getName();
         }
-        if (itemStrings.length > 0) {
-            dBuilder.setItems(itemStrings, new DialogInterface.OnClickListener() {
+        if (fileStrings.length > 0) {
+            dBuilder.setItems(fileStrings, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    loadToFragment(fileArr[which]);
                     dialog.dismiss();
                 }
             });

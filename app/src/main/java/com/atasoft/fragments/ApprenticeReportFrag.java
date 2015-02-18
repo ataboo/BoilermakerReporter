@@ -94,6 +94,10 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         }
     }
 
+    public void loadPDFtoViews(String fileName){
+
+    }
+
     private void setupViews(){
         Button goButton = (Button) thisFrag.findViewById(R.id.appr_pushBootan);
         goButton.setOnClickListener(this);

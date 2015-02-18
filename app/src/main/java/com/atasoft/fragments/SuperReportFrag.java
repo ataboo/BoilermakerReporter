@@ -145,6 +145,31 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         inputPath = setSteward ? stewardInputPath : superInputPath;
     }
 
+    //Lot of dirty laundry here but PDFManager is getting busy
+    public void loadPDFtoViews(PDDocument pdRead){
+        PDAcroForm acroForm = pdRead.getDocumentCatalog().getAcroForm();
+        PDFManager.setEditsLinLayFromFile(acroForm, towLay);
+        PDFManager.setCheckViewsFromFile(acroForm, dutyLay);
+        for(String[] fieldArr : fieldNameEdits){
+            PDFManager.setEditViewFromFile(PDFManager.getTextFieldValue(acroForm, fieldArr[1]),
+                    (EditText) PDFManager.getViewByName(fieldArr[0], thisFrag));
+        }
+        for(String[] fieldArr : ratingCommentFieldNames){
+            PDFManager.setEditViewFromFile(PDFManager.getTextFieldValue(acroForm, fieldArr[1]),
+                    (EditText) PDFManager.getViewByName(fieldArr[0],thisFrag));
+        }
+
+        PDFManager.setSpinnerCheckFromFile(acroForm, jobTypeSpinnerOptions[0], thisFrag);
+
+        for(String[] fieldArr: attendanceSpinners){
+            PDFManager.setSpinnerCheckFromFile(acroForm, fieldArr, thisFrag);
+        }
+
+        for(String[] fieldArr: ratingSpinners){
+            PDFManager.setSpinnerTextFromFile(acroForm, fieldArr, thisFrag);
+        }
+    }
+
 
 
     private void editFields(PDAcroForm acroForm) throws IOException{
@@ -281,7 +306,7 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
 
     //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
     public static final String[][] jobTypeSpinnerOptions = {
-            {"projTypeSpinner", "projType"},
+            {"jobTypeSpinner", "projType"},
             {"Construction","Maintenance","Demolition", "Shop"}};
 
     //Rating Excellent, Above Average, Average, Below Average, Unsatisfactory [Spinner View name, textfield name 1-5]

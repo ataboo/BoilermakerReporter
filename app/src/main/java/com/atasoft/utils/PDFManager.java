@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.atasoft.boilermakerreporter.MainActivity;
@@ -208,6 +209,53 @@ public class PDFManager {
 
     }
 
+    public static void setEditsLinLayFromFile(PDAcroForm acroForm, LinearLayout linLay){
+        for(int i=0; i< linLay.getChildCount(); i++){
+            View child = linLay.getChildAt(i);
+            if(child instanceof LinearLayout){
+                EditText fieldEdit = null;
+                String editLabelTag = null;
+                for(int j=0; j<((LinearLayout) child).getChildCount(); j++){
+                    View grandChild = ((LinearLayout) child).getChildAt(j);
+                    if(grandChild instanceof TextView){
+                        //EditText is a subclass of TextView
+                        if(grandChild instanceof EditText){
+                            fieldEdit = (EditText) grandChild;
+                        } else {
+                            editLabelTag = grandChild.getTag().toString();
+                        }
+                    }
+                }
+                if(fieldEdit != null && editLabelTag != null) {
+                    editLabelTag = editLabelTag + "Hrs";
+                    fieldEdit.setText(getTextFieldValue(acroForm, editLabelTag));
+                }
+            }
+        }
+    }
+
+    public static void setCheckViewsFromFile(PDAcroForm acroForm, LinearLayout linLay){
+        for(int i=0; i<linLay.getChildCount(); i++){
+            View child = linLay.getChildAt(i);
+            if(child instanceof CheckBox){
+                String checkTag = child.getTag().toString();
+                if(checkTag != null){
+                    boolean isChecked = getCheckboxFieldState(acroForm, checkTag);
+                    ((CheckBox) child).setChecked(isChecked);
+                }
+            }
+        }
+    }
+
+    public static void setEditViewFromFile(String value, EditText eText){
+        if(eText == null){
+            Log.e("PDFManager", "Tried to set Edit from File and eText was null.");
+            return;
+        }
+        eText.setText(value);
+    }
+
+
     //Generate checkboxes in a linearlayout from strings
     public static void populateChecks(View parentFrag, LinearLayout linLay, String[][] names){
         if(linLay == null){
@@ -223,6 +271,21 @@ public class PDFManager {
             check.setText(names[i][1]);
             linLay.addView(check);
         }
+    }
+
+    public static String getTextFieldValue(PDAcroForm acroForm, String fieldName){
+        try{
+            PDFieldTreeNode field = acroForm.getField(fieldName);
+            if(field == null){
+                Log.w("PDFManager", "Couldn't find field: " + fieldName);
+                return "";
+            }
+            return field.getValue().toString();
+        } catch (IOException ie){
+            ie.printStackTrace();
+            Log.e("PDFManager", "IOException getting text field: " + fieldName);
+        }
+        return "";
     }
 
     public static View getViewByName(String name, View fragView){
@@ -241,42 +304,46 @@ public class PDFManager {
         return pixels;
     }
 
-    public static String[][] getSavedFiles(AssetManager assetManager){
+    public static File[] getSavedFiles(){
         File folder = new File(outputPath);
-        ArrayList<String> fileCandidates = new ArrayList<String>();
-        ArrayList<String> fileTypes = new ArrayList<String>();
+        ArrayList<File> filesArr = new ArrayList<File>();
         for(File fileEntry :  folder.listFiles()) {
             if (fileEntry.isFile()) {
-                int reportType = getReportType(fileEntry, assetManager);
-                if (reportType != NOT_REPORT_PDF) {
-                    fileCandidates.add(fileEntry.getName());
-                    fileTypes.add(getStringFromFileCode(reportType));
-                }
+                String[] fileSplit = fileEntry.getName().split("\\.");
+                if(fileSplit.length > 1 && fileSplit[fileSplit.length -1].matches("pdf"))
+                        filesArr.add(fileEntry);
+                Log.w("PDFManager", fileEntry.getName() + " came out as: " +
+                        (fileSplit.length > 1 && fileSplit[fileSplit.length -1].matches("pdf")));
+                Log.w("PDFManager", "Split is: " + fileEntry.getName().split("\\.").length);
+                //Log.w("PDFManager", "fileSplit length is: " + fileSplit.length + " last match is: " +
+                        //fileSplit[fileSplit.length -1].matches("pdf"));
             }
         }
-
-        String[][] outArr = new String[2][fileCandidates.size()];
-        outArr[0] = fileCandidates.toArray(outArr[0]);
-        outArr[1] = fileTypes.toArray(outArr[1]);
+        File[] outArr = new File[filesArr.size()];
+        outArr = filesArr.toArray(outArr);
         return outArr;
     }
 
 
-    public static int getReportType(File pdfFile, AssetManager assetManager){
-        String tagString = "fail";
+    public static int getReportType(File pdfFile){
         PDDocument pd = openPDFFromResources(pdfFile);
         if(pd == null) return NOT_REPORT_PDF;
-
+        
+        return getReportType(pd, pdfFile.getName());
+    }
+    
+    public static int getReportType(PDDocument pdDoc, String fileName){
+        String tagString = "fail";
         try{
-            PDFieldTreeNode typeField = pd.getDocumentCatalog().getAcroForm().getField("typeTag");
+            PDFieldTreeNode typeField = pdDoc.getDocumentCatalog().getAcroForm().getField("typeTag");
             if(typeField == null){
-                Log.w("PDFManager", "got null from typeTag field on: " + pdfFile.getName());
-                pd.close();
+                Log.w("PDFManager", "got null from typeTag field from: " + fileName);
+                pdDoc.close();
                 return NOT_REPORT_PDF;
             }
             tagString = typeField.getValue().toString();
-            Log.w("PDFManager", "got: " + tagString + " from: " + pdfFile.getName());
-            pd.close();
+            Log.w("PDFManager", "got: " + tagString + " from: " + fileName);
+            pdDoc.close();
         } catch (IOException ie){
             Log.w("PDFManager", "typeTag IOError.");
             return  NOT_REPORT_PDF;
@@ -316,5 +383,51 @@ public class PDFManager {
                 return "Steward";
         }
         return "Not Valid File";
+    }
+
+    public static void setSpinnerCheckFromFile(PDAcroForm acroForm, String[] fieldNames, View parentFrag){
+        Spinner spinner = (Spinner) getViewByName(fieldNames[0], parentFrag);
+        if(spinner == null){
+            Log.e("PDFManager", "Tried to set Spinner: " + fieldNames[0] + " and found null.");
+            return;
+        }
+        int fieldCount = spinner.getAdapter().getCount();
+        for(int i=0; i<fieldCount; i++){
+            boolean isChecked = getCheckboxFieldState(acroForm, fieldNames[1] + Integer.toString(i+1));
+            if(isChecked){
+                spinner.setSelection(i);
+                return;
+            }
+        }
+        return;
+    }
+
+    public static void setSpinnerTextFromFile(PDAcroForm acroForm, String[] fieldNames, View parentFrag){
+        Spinner spinner = (Spinner) getViewByName(fieldNames[0], parentFrag);
+        if(spinner == null){
+            Log.e("PDFManager", "Tried to set Spinner: " + fieldNames[0] + " and found null.");
+            return;
+        }
+        String fieldVal =  getTextFieldValue(acroForm, fieldNames[1]);
+        int spinIndex = 0;
+        try{
+            spinIndex = Integer.parseInt(fieldVal);
+        } catch (NumberFormatException nfe){
+            Log.e("PDFManager", "setSpinnerTextFromFile tried to parse: " + fieldNames[1] +
+                    " and got an NFE.");
+            // nfe.printStackTrace();
+        }
+        spinIndex = (spinIndex < spinner.getCount()) ? spinIndex : 0;
+        spinner.setSelection(spinIndex);
+    }
+
+    public static boolean getCheckboxFieldState(PDAcroForm acroForm, String checkName){
+        try{
+            PDCheckbox checkbox = (PDCheckbox) acroForm.getField(checkName);
+            return checkbox.isChecked();
+        } catch (IOException ie){
+            ie.printStackTrace();
+        }
+        return false;
     }
 }
