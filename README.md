@@ -16,7 +16,7 @@ Feelfree to mail bmtoolbox@gmail.com with any comments or suggestions.
 - Made ActionBar spinner update on file load of other type
 
 #### V 1.0 (2/19/15):
-- Innitial release
+- Initial release
 
 ### Notes:
 - Form fields won't show up on Android Google Drive's PDF Viewer so I'd suggest Adobe Reader
