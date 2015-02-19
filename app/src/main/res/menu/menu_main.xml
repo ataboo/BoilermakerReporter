@@ -9,8 +9,12 @@
         app:showAsAction="never" />
     -->
     <item android:id="@+id/action_openFile"
-        android:title="Open..."
+        android:title="Open PDF..."
         android:orderInCategory="1"
+        android:showAsAction="never"/>
+    <item android:id="@+id/action_emailFile"
+        android:title="Email PDF..."
+        android:orderInCategory="2"
         android:showAsAction="never"/>
     <item android:id="@+id/action_about"
         android:title="@string/action_about"

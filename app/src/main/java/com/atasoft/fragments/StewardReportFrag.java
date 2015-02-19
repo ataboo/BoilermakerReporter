@@ -4,7 +4,7 @@ package com.atasoft.fragments;
 public class StewardReportFrag extends SuperReportFrag {
     @Override
     public void setupViews(){
-        super.setToSteward(true);
         super.setupViews();
+        super.setToSteward(true);
     }
 }

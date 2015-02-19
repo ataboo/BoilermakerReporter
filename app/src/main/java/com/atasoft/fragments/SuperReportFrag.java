@@ -173,12 +173,12 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         PDFManager.setEditsFromFormLin(acroForm, towLay);
         PDFManager.setCheckViewsFromFormLin(acroForm, dutyLay);
         for(String[] fieldArr : fieldNameEdits){
-            PDFManager.setEditView(PDFManager.getTextFieldValue(acroForm, fieldArr[1]),
-                    (EditText) PDFManager.getViewByName(fieldArr[0], thisFrag));
+            PDFManager.setEditView((EditText) PDFManager.getViewByName(fieldArr[0], thisFrag),
+                    PDFManager.getTextFieldValue(acroForm, fieldArr[1]));
         }
         for(String[] fieldArr : ratingCommentFieldNames){
-            PDFManager.setEditView(PDFManager.getTextFieldValue(acroForm, fieldArr[1]),
-                    (EditText) PDFManager.getViewByName(fieldArr[0], thisFrag));
+            PDFManager.setEditView((EditText) PDFManager.getViewByName(fieldArr[0], thisFrag),
+                    PDFManager.getTextFieldValue(acroForm, fieldArr[1]));
         }
 
         PDFManager.setSpinnerCheckFromFile(acroForm, jobTypeSpinnerOptions[0], thisFrag);
@@ -189,6 +189,11 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
 
         for(String[] fieldArr: ratingSpinners){
             PDFManager.setSpinnerTextFromFile(acroForm, fieldArr, thisFrag);
+        }
+        try{
+            pdRead.close();
+        } catch(IOException ie){
+            ie.printStackTrace();
         }
         return true;
     }

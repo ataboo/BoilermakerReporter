@@ -188,7 +188,7 @@ public class PDFManager {
             case STEWARD_LAUNCH:
                 return "Steward";
         }
-        return "Not Valid File";
+        return "Not Valid";
     }
 
     public static boolean getCheckboxFieldState(PDAcroForm acroForm, String checkName){

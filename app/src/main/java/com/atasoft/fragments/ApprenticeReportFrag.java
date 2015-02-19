@@ -118,7 +118,11 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         for(String[] fieldArr: ratingSpinners){
             PDFManager.setSpinnerTextFromFile(acroForm, fieldArr, thisFrag);
         }
-
+        try{
+            pdRead.close();
+        } catch(IOException ie){
+            ie.printStackTrace();
+        }
         return true;
     }
 
@@ -288,7 +292,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
             {"appr_absentSpinner", "absent"}};
     //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]
     public static final String[][] jobSpinnerOptions = {
-            {"projTypeSpinner", "projType"},
+            {"jobTypeSpinner", "projType"},
             {"Construction","Maintenance","Demolition", "Shop"}};
     //</editor-fold>
 
