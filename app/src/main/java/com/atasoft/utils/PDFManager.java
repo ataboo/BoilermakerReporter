@@ -3,10 +3,14 @@ package com.atasoft.utils;
 //functions used to edit PDFs for BoilermakerReporter
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Layout;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -28,7 +32,7 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDFieldTreeNode;
 import java.io.*;
 import java.util.ArrayList;
 public class PDFManager {
-    public static final String outputFolder = "/Documents/BMReporter";
+    public static final String outputFolder = "/Downloads/BMReporter";
     public static final String root = Environment.getExternalStorageDirectory().toString();
     public static final String outputPath = root + outputFolder;
     public static final String saveTagField = "projType1";
@@ -127,7 +131,7 @@ public class PDFManager {
                 fragView.getContext().getPackageName());
         View retView =  fragView.findViewById(resId);
         if (retView == null){
-            Log.w("ReportForm.java", "Can't fine View " + name + ". Returned null.");
+            Log.w("ReportForm.java", "Can't find View " + name + ". Returned null.");
         }
         return retView;}
 
@@ -382,6 +386,138 @@ public class PDFManager {
         }
         eText.setText(value);
     }
+
+
+
+    //========================================Bundle Stuff==========================================
+    public static void setEditFromBundle(Bundle bundle, String eTextName, View parentView){
+        EditText eText = (EditText) getViewByName(eTextName, parentView);
+        if(eText == null) return;
+        eText.setText(bundle.getString("etext_" + eTextName, ""));
+        String value = bundle.getString("etext_" + eTextName, "");
+        Log.w("PDFMananger", "Set " + eTextName + " to " + value);
+    }
+
+    public static void setBundleFromEdit(Bundle bundle, String eTextName, View parentView){
+        EditText eText = (EditText) getViewByName(eTextName, parentView);
+        if(eText == null) return;
+
+        bundle.putString("etext_" + eTextName, eText.getText().toString());
+    }
+
+    public static void setSpinnerFromBundle(Bundle bundle, String spinnerName, View parrentView){
+        Spinner spinner = (Spinner) getViewByName(spinnerName, parrentView);
+        if(spinner == null) return;
+
+        spinner.setSelection(bundle.getInt("spinner_" + spinnerName, 0));
+    }
+
+    public static void setBundleFromSpinner(Bundle bundle, String spinnerName, View parentView){
+        Spinner spinner = (Spinner) getViewByName(spinnerName, parentView);
+        if(spinner == null) return;
+
+        bundle.putInt("spinner_" + spinnerName, spinner.getSelectedItemPosition());
+    }
+
+
+    public static void setCheckboxFromBundle(Bundle bundle, String checkName, View parentView){
+        CheckBox checkBox = (CheckBox) getViewByName(checkName, parentView);
+        if(checkBox == null) return;
+
+        checkBox.setChecked(bundle.getBoolean("checkbox_" + checkName, false));
+    }
+
+    public static void setBundleFromCheckbox(Bundle bundle, String checkName, View parentView){
+        CheckBox checkBox = (CheckBox) getViewByName(checkName, parentView);
+        if(checkBox == null) return;
+
+        bundle.putBoolean("checkbox_" + checkName, checkBox.isChecked());
+    }
+
+    //Enough screwing around with bundles. Brute force.
+    public static void powerSave(SharedPreferences.Editor editor, RelativeLayout relLay, String prefix){
+        if(relLay == null){
+            Log.e("PDFManager", "Tried to powerSave but RelativeLayout Prefix: " + prefix + " was null.");
+            return;
+        }
+        setPrefsFromChildren(editor, relLay, 0, prefix);
+    }
+
+    public static void powerLoad(SharedPreferences prefs, RelativeLayout relLay, String prefix){
+        if(relLay == null){
+            Log.e("PDFManager", "Tried to powerLoad but RelativeLayout Prefix: " + prefix + " was null.");
+            return;
+        }
+        setChildrenFromPrefs(prefs, relLay, 0, prefix);
+    }
+
+    public static int setPrefsFromChildren(SharedPreferences.Editor editor, View parent, int count, String prefix) {
+        if(parent instanceof LinearLayout){
+            for(int i=0; i<((LinearLayout) parent).getChildCount(); i++){
+                count = setPrefsFromChildren(editor, ((LinearLayout) parent).getChildAt(i), count, prefix);
+            }
+        }
+        if(parent instanceof RelativeLayout){
+            for(int i=0; i<((RelativeLayout) parent).getChildCount(); i++){
+                count = setPrefsFromChildren(editor, ((RelativeLayout) parent).getChildAt(i), count, prefix);
+            }
+        }
+        if(parent instanceof EditText) {
+            editor.putString(prefix + "Edit_" + count, ((EditText) parent).getText().toString());
+            //String value = ((EditText) parent).getText().toString();
+            //Log.w("PDFManager", "Bundled Edit_" + count + " as " + value);
+            return ++count;
+        }
+        if(parent instanceof Spinner){
+            editor.putInt(prefix + "Spinner_" + count, ((Spinner) parent).getSelectedItemPosition());
+            //int value = ((Spinner) parent).getSelectedItemPosition();
+            //Log.w("PDFManager", "Bundled Spinner_" + count + " as " + value);
+            return ++count;
+        }
+        if(parent instanceof CheckBox){
+            editor.putBoolean(prefix + "Check_" + count, ((CheckBox) parent).isChecked());
+            //boolean value = ((CheckBox) parent).isChecked();
+            //Log.w("PDFManager", "Bundled Check_" + count + " as " + value);
+            return ++count;
+        }
+        return count;
+    }
+
+    private static int setChildrenFromPrefs(SharedPreferences prefs, View parent, int seed, String prefix){
+        int count = seed;
+        if(parent instanceof LinearLayout){
+            for(int i=0; i<((LinearLayout) parent).getChildCount(); i++){
+                count = setChildrenFromPrefs(prefs, ((LinearLayout) parent).getChildAt(i), count, prefix);
+            }
+        }
+        if(parent instanceof RelativeLayout){
+            for(int i=0; i<((RelativeLayout) parent).getChildCount(); i++){
+                count = setChildrenFromPrefs(prefs, ((RelativeLayout) parent).getChildAt(i), count, prefix);
+            }
+        }
+        if(parent instanceof EditText) {
+            ((EditText) parent).setText(prefs.getString(prefix + "Edit_" + count, ""));
+            //String value = ((EditText) parent).getText().toString();
+            //Log.w("PDFManager", "Set Edit_" + count + " to " + value);
+            return ++count;
+        }
+        if(parent instanceof Spinner){
+            ((Spinner) parent).setSelection(prefs.getInt(prefix + "Spinner_" + count, 0));
+            //int value = ((Spinner) parent).getSelectedItemPosition();
+            //Log.w("PDFManager", "Set Spinner_" + count + " to " + value);
+            return ++count;
+        }
+        if(parent instanceof CheckBox){
+            ((CheckBox) parent).setChecked(prefs.getBoolean(prefix + "Check_" + count, false));
+            //boolean value = ((CheckBox) parent).isChecked();
+            //Log.w("PDFManager", "Set Check_" + count + " to " + value);
+            return ++count;
+        }
+        return count;
+    }
+
+
+
 
     public static void setSpinnerCheckFromFile(PDAcroForm acroForm, String[] fieldNames, View parentFrag){
         Spinner spinner = (Spinner) getViewByName(fieldNames[0], parentFrag);

@@ -2,10 +2,12 @@ package com.atasoft.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -48,19 +51,19 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
     private LinearLayout dutyLay;
     private Spinner jobTypeSpinner;
     private MainActivity parentActivity;
+    private SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.appr_report, container, false);
         return v;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        setupViews();
         super.onViewCreated(view, savedInstanceState);
+        setupViews();
     }
 
     //<editor-fold desc="pHandler">
@@ -95,6 +98,21 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         if(v.getId() == R.id.appr_pushBootan){
             goSubmit();
         }
+        if(v.getId() == R.id.appr_clearBootan){
+            clearViews();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setViewsFromPrefs();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        setPrefsFromViews();
     }
 
     public boolean loadPDFtoViews(PDDocument pdRead){
@@ -111,7 +129,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
 
         PDFManager.setSpinnerCheckFromFile(acroForm, jobSpinnerOptions[0], thisFrag);
 
-        for(String[] fieldArr: attendSpinners){
+        for(String[] fieldArr: attendanceSpinners){
             PDFManager.setSpinnerCheckFromFile(acroForm, fieldArr, thisFrag);
         }
 
@@ -130,9 +148,12 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         this.thisFrag = getView();
         this.context = thisFrag.getContext();
         this.parentActivity = (MainActivity) getActivity();
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         Button goButton = (Button) thisFrag.findViewById(R.id.appr_pushBootan);
         goButton.setOnClickListener(this);
+        Button clrButton = (Button) thisFrag.findViewById(R.id.appr_clearBootan);
+        clrButton.setOnClickListener(this);
 
         pBar = new ProgressDialog(context);
 
@@ -148,7 +169,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
             for(String[] arr : ratingSpinners){
                 fieldMap.put(arr[1], new FormFieldHolder(arr[1], arr[0], 5));
             }
-            for(String[] arr : attendSpinners){
+            for(String[] arr : attendanceSpinners){
                 fieldMap.put(arr[1], new FormFieldHolder(arr[1], arr[0], 5));
             }
             fieldMap.put(jobSpinnerOptions[0][1],
@@ -177,7 +198,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         for(String[] arr: ratingSpinners){
             processRatingSpinner(arr[1], (Spinner) PDFManager.getViewByName(arr[0], thisFrag), acroForm);
         }
-        for(String[] arr: attendSpinners){
+        for(String[] arr: attendanceSpinners){
             processCheckSpinner(arr[1], (Spinner) PDFManager.getViewByName(arr[0], thisFrag), acroForm);
         }
         processCheckSpinner(jobSpinnerOptions[0][1], jobTypeSpinner, acroForm);
@@ -236,6 +257,25 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         PDFManager.setTextField(acroForm, fieldName, Integer.toString(5 - holder.selectedIndex));
     }
 
+    private void setViewsFromPrefs(){
+        String prefix = Integer.toString(PDFManager.APPRENTICE_LAUNCH);
+        RelativeLayout relLay = (RelativeLayout) thisFrag.findViewById(R.id.masterRelLay);
+        PDFManager.powerLoad(prefs, relLay, prefix);
+    }
+
+    private void setPrefsFromViews(){
+        String prefix = Integer.toString(PDFManager.APPRENTICE_LAUNCH);
+        RelativeLayout relLay = (RelativeLayout) thisFrag.findViewById(R.id.masterRelLay);
+        SharedPreferences.Editor editor = prefs.edit();
+        PDFManager.powerSave(editor, relLay, prefix);
+        editor.commit();
+    }
+
+    private void clearViews(){
+        prefs.edit().clear().commit();
+        setViewsFromPrefs();
+    }
+
     //<editor-fold desc="Static String Arrays">
     //CheckBox Toggle Fields [Form Checkbox Name, Display String]
     public static final String[][] towChecks = {
@@ -287,7 +327,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
             {"appr_superRateSpinner", "superBox"},
             {"appr_journeySpinner", "journeyBox"}};
     //pre-filled [yes, no, often, rarely, never]
-    public static final String[][] attendSpinners = {
+    public static final String[][] attendanceSpinners = {
             {"appr_lateSpinner", "late"},
             {"appr_absentSpinner", "absent"}};
     //CheckBox Spinner Fields.  [Spinner View name, PDF box1, displayname 1, PDF box2...]

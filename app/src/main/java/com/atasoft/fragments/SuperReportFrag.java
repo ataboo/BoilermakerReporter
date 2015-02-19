@@ -4,8 +4,10 @@ import com.atasoft.boilermakerreporter.*;
 import com.atasoft.utils.*;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.*;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.app.*;
@@ -41,6 +43,7 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
     private String outFileFull = "";
     private View thisFrag;
     private Context context;
+    private SharedPreferences prefs;
     private MainActivity parentActivity;
     private ProgressDialog pBar;
     private LinearLayout towLay;
@@ -52,15 +55,28 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-       View v = inflater.inflate(R.layout.super_report, container, false);
+        View v = inflater.inflate(R.layout.super_report, container, false);
         return v;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        setupViews();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupViews();
+        //should be null for first run
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setViewsFromPrefs();
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        setPrefsFromViews();
     }
 
     //<editor-fold desc="pHandler">
@@ -89,11 +105,13 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
     //</editor-fold>
 
 
-
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.pushBootan){
             goSubmit();
+        }
+        if(v.getId() == R.id.clearBootan){
+            clearViews();
         }
     }
 
@@ -101,9 +119,12 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         this.thisFrag = getView();
         this.context = thisFrag.getContext();
         this.parentActivity = (MainActivity) getActivity();
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         Button goButton = (Button) thisFrag.findViewById(R.id.pushBootan);
         goButton.setOnClickListener(this);
+        Button clearButton = (Button) thisFrag.findViewById(R.id.clearBootan);
+        clearButton.setOnClickListener(this);
 
         pBar = new ProgressDialog(context);
 
@@ -137,7 +158,7 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         }
 
         this.towLay = (LinearLayout) thisFrag.findViewById(R.id.towCheckLay);
-        PDFManager.populateLinWithEdits(thisFrag, towLay, towChecks);
+        PDFManager.populateLinWithEdits(thisFrag, towLay, towEdits);
         this.dutyLay = (LinearLayout) thisFrag.findViewById(R.id.dutyCheckLay);
         PDFManager.populateCheckViewsFromFormLin(thisFrag, dutyLay, dutyChecks);
 
@@ -146,6 +167,25 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         PDDocument pdRead = parentActivity.getPDFLoadQueued(typeCode);
         if(pdRead != null) loadPDFtoViews(pdRead);
 
+    }
+
+    private void setViewsFromPrefs(){
+        String prefix = Integer.toString(typeCode);
+        RelativeLayout relLay = (RelativeLayout) thisFrag.findViewById(R.id.masterRelLay);
+        PDFManager.powerLoad(prefs, relLay, prefix);
+    }
+
+    private void setPrefsFromViews(){
+        String prefix = Integer.toString(typeCode);
+        RelativeLayout relLay = (RelativeLayout) thisFrag.findViewById(R.id.masterRelLay);
+        SharedPreferences.Editor editor = prefs.edit();
+        PDFManager.powerSave(editor, relLay, prefix);
+        editor.commit();
+    }
+
+    private void clearViews(){
+        prefs.edit().clear().commit();
+        setViewsFromPrefs();
     }
 
     //Called by subclass StewardReportFrag
@@ -271,17 +311,10 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         pdfThread.start();
     }
 
-    private void populateSpinner(Spinner spinner, String[] strings){
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item, strings);
-        spinner.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-
     //make these with ctrl-alt-T
     //<editor-fold desc="Static fieldStrings">
     //CheckBox Toggle Fields [Form Checkbox Name, Display String]
-    public static final String[][] towChecks = {
+    public static final String[][] towEdits = {
             //Type of Work
             {"towAtomic", "Atomic Rad Work"},
             {"towPlate", "Plate-Work"},

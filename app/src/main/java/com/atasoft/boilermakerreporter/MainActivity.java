@@ -1,6 +1,7 @@
 package com.atasoft.boilermakerreporter;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -10,6 +11,7 @@ import android.support.v4.app.*;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.*;
 import android.widget.ArrayAdapter;
@@ -28,11 +30,11 @@ import java.net.URI;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
-
     public static final int SUPER_LAUNCH = PDFManager.SUPER_LAUNCH;
     public static final int APPRENTICE_LAUNCH = PDFManager.APPRENTICE_LAUNCH;
     public static final int STEWARD_LAUNCH = PDFManager.STEWARD_LAUNCH;
 
+    private int launchMode;
     private SuperReportFrag superFrag;
     private ApprenticeReportFrag apprenticeFrag;
     private StewardReportFrag stewardFrag;
@@ -42,7 +44,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        int launchMode = getIntent().getIntExtra("launch_mode", SUPER_LAUNCH);
+        this.launchMode = getIntent().getIntExtra("launch_mode", SUPER_LAUNCH);
+        if(savedInstanceState != null){
+            this.launchMode = savedInstanceState.getInt("last_active_frag", launchMode);
+        }
         Log.w("MainActivity", "Launch Mode:" + launchMode);
 
         setContentView(R.layout.activity_main);
@@ -54,13 +59,26 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             apprenticeFrag.setRetainInstance(true);
             stewardFrag = new StewardReportFrag();
             this.actionBar = getSupportActionBar();
-            if(actionBar!=null) initActionBar(launchMode);
+            if(actionBar != null) initActionBar(launchMode);
             swapFrag(launchMode);
         }
 
 	}
 
-	@Override
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+
+
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("last_active_frag", launchMode);
+    }
+
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
 		MenuInflater inflater = getMenuInflater();
@@ -105,18 +123,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             Log.w("MainActivity", failToast);
         }
         int reportType = PDFManager.getReportType(pdDoc, pdfFile.getName());
-
+        this.actionBar = getSupportActionBar();
+        if(actionBar!=null) actionBar.setSelectedNavigationItem(reportType);
         switch (reportType){
             case SUPER_LAUNCH:
-                swapFrag(SUPER_LAUNCH);
+                //swapFrag(SUPER_LAUNCH);
                 if(!superFrag.loadPDFtoViews(pdDoc)) addPDToQueue(pdDoc, reportType);
                 break;
             case APPRENTICE_LAUNCH:
-                swapFrag(APPRENTICE_LAUNCH);
+               // swapFrag(APPRENTICE_LAUNCH);
                 if(!apprenticeFrag.loadPDFtoViews(pdDoc)) addPDToQueue(pdDoc, reportType);
                 break;
             case STEWARD_LAUNCH:
-                swapFrag(STEWARD_LAUNCH);
+                //swapFrag(STEWARD_LAUNCH);
                 if(!stewardFrag.loadPDFtoViews(pdDoc)) addPDToQueue(pdDoc, reportType);
                 break;
             default:
@@ -287,6 +306,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
 
     private void swapFrag(int launchMode) {
+        this.launchMode = launchMode;
         Fragment activeFrag = superFrag;
         switch (launchMode) {
             case SUPER_LAUNCH:
