@@ -29,34 +29,8 @@ public class FormFieldHolder {
                     "setOutputFromEdit. Failed.");
             return;
         }
-        if(!(eText instanceof EditText)){
-            Log.e("FormFieldHolder", this.fieldName + " holder expected EditText in " +
-                    "setOutputFromEdit. Failed.");
-            return;
-        }
         String outStr = eText.getText().toString();
         if (outStr.matches("")) outStr = " ";
-
-        //sinText 1, 2 , 3 are split into 3 views from 9 digit sin.
-        if(fieldName.contains("sinText")) {
-            outStr = outStr.replace(" ", "");
-            if(outStr.length() != 9){
-                Log.w("FormFieldHolder", "Sin number was not 9 digits.");
-                return;
-            }
-            int sinInt = Integer.parseInt(fieldName.substring(7));
-            switch(sinInt){
-                case 1:
-                    outStr = outStr.substring(0,3);
-                    break;
-                case 2:
-                    outStr = outStr.substring(3,6);
-                    break;
-                default:
-                    outStr = outStr.substring(6);
-                    break;
-            }
-        }
         this.outputString = outStr;
     }
 
@@ -78,90 +52,4 @@ public class FormFieldHolder {
         }
         return outArr;
     }
-
-    /*
-    //<editor-fold desc="Field Name Arrays">
-    //===============================Common Fields====================================
-    //CheckBox Toggle Fields [Form Checkbox Name, Display String]
-    public static final String[][] towChecks = {
-            //Type of Work
-            {"towAtomic", "Atomic Rad Work"},
-            {"towBins", "Bins & Hoppers"},
-            {"towBoilers", "Boilers"},
-            {"towConds", "Condensers/Evaporators"},
-            {"towFurnaces", "Furnaces"},
-            {"towExchangers", "Heat Exchangers"},
-            {"towPenstock", "Penstock"},
-            {"towPrecips", "Precipitators"},
-            {"towVessel", "Pressure Vessel"},
-            {"towScroll", "Scroll Casings"},
-            {"towScrubbers", "Scrubbers"},
-            {"towStacks", "Stacks & Breeching"},
-            {"towTanks", "Tanks"},
-            {"towTowers", "Towers"}};
-
-    public static final String[][] dutyChecks = {
-            {"dutyOHS", "Adhere to OH & S"},
-            {"dutyBurning", "Burning"},
-            {"dutyWatch", "Confined Space Watch"},
-            {"dutyExpanding", "Expanding"},
-            {"dutyGlass", "Fibreglass"},
-            {"dutyFitting", "Fitting"},
-            {"dutyGrinding", "Grinding"},
-            {"dutyLayout", "Layout"},
-            {"dutyMetalizing", "Metalizing"},
-            {"dutyReading", "Reading Drawings"},
-            {"dutyRigging", "Rigging"},
-            {"dutySpark", "Spark Watch"},
-            {"dutyTack", "Tack Welding"},
-            {"dutyTray", "Tray Work"}};
-
-    //=========================Super Form======================
-    //Edit Text fields.  [EditText name, PDF form name]
-    public static final String[][] fieldNameEdits = {
-            {"appNameEdit", "aprNameText"},
-            {"sinNumberEdit", "sinText1"},
-            {"sinNumberEdit", "sinText2"},
-            {"sinNumberEdit", "sinText3"},
-            {"empNameEdit", "empNameText"},
-            {"jobLocationEdit", "jobLocText"},
-            {"jobStewardEdit", "jobStewardText"},
-            {"currentDateEdit", "curDateText"},
-            {"jobStartEdit", "jobStartText"},
-            {"jobEndEdit", "jobEndText"},
-            {"absentEdit", "absNumberBox"},
-            {"lateEdit", "lateNumberBox"},
-            {"superNameEdit", "superName"},
-            {"commentsEdit", "commentsText"}};
-
-    //Rating Excellent, Above Average, Average, Below Average, Unsatisfactory [Spinner View name, textfield name 1-5]
-    public static final String[][] ratingSpinners = {
-            {"safetySpinner", "safetyBox"},
-            {"workerSpinner", "workersBox"},
-            {"jobSpinner", "jobBox"},
-            {"initSpinner", "initBox"},
-            {"capSpinner", "capBox"}};
-
-    //Rating 1-3
-    public static final String[][] attendanceSpinners = {
-            {"absentSpinner", "absBox"},
-            {"lateSpinner", "lateBox"}};
-*/
-
-
-    //---Apprentice----
-    //New ones
-    //regNumText, localText, hoursText, appraiseBox, relationBox, superBox, journeyBox
-    //Removed
-    // Sin Number, ratio
-
-    //---Super---
-    //New ones
-    //empNumText, superNameText
-    //localText, localNumEdit
-    // safeAttText, workAttText, jobAttText, initText, capText, ratingText, all the coms
-    //late1-3, absent1-3, absentText, lateText
-
-
-    //</editor-fold
 }

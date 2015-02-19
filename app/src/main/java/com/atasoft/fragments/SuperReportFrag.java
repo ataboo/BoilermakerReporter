@@ -41,27 +41,24 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
     private String outFileFull = "";
     private View thisFrag;
     private Context context;
+    private MainActivity parentActivity;
     private ProgressDialog pBar;
     private LinearLayout towLay;
     private LinearLayout dutyLay;
     private Spinner ratingSpinner;
     private Spinner jobTypeSpinner;
+    public int typeCode = PDFManager.SUPER_LAUNCH;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
        View v = inflater.inflate(R.layout.super_report, container, false);
-        //thisFrag = getView();
-        //this.context = v.getContext();
-        //setupViews();
         return v;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        this.thisFrag = getView();
-        this.context = thisFrag.getContext();
         setupViews();
         super.onViewCreated(view, savedInstanceState);
     }
@@ -101,6 +98,10 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
     }
 
     public void setupViews(){
+        this.thisFrag = getView();
+        this.context = thisFrag.getContext();
+        this.parentActivity = (MainActivity) getActivity();
+
         Button goButton = (Button) thisFrag.findViewById(R.id.pushBootan);
         goButton.setOnClickListener(this);
 
@@ -136,11 +137,18 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         }
 
         this.towLay = (LinearLayout) thisFrag.findViewById(R.id.towCheckLay);
-        PDFManager.populateWithEdits(thisFrag, towLay, towChecks);
+        PDFManager.populateLinWithEdits(thisFrag, towLay, towChecks);
         this.dutyLay = (LinearLayout) thisFrag.findViewById(R.id.dutyCheckLay);
-        PDFManager.populateChecks(thisFrag, dutyLay, dutyChecks);
+        PDFManager.populateCheckViewsFromFormLin(thisFrag, dutyLay, dutyChecks);
+
+        //If this wasn't they active frag when loadPDFFromFile was called, MainActivity added the
+        //PDDoc to a queue.
+        PDDocument pdRead = parentActivity.getPDFLoadQueued(typeCode);
+        if(pdRead != null) loadPDFtoViews(pdRead);
+
     }
 
+    //Called by subclass StewardReportFrag
     public void setToSteward(boolean setSteward){
         TextView headerTitle = (TextView) thisFrag.findViewById(R.id.reportHeaderLabel);
         if(headerTitle == null){
@@ -150,22 +158,27 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
 
         int headerID = (setSteward) ? R.string.report_header_steward : R.string.super_header_label;
         headerTitle.setText(getResources().getString(headerID));
-        outputFileName = setSteward ? stewardOutputFileName : superOutputFileName;
-        inputPath = setSteward ? stewardInputPath : superInputPath;
+        this.outputFileName = setSteward ? stewardOutputFileName : superOutputFileName;
+        this.inputPath = setSteward ? stewardInputPath : superInputPath;
+        this.typeCode = setSteward ? PDFManager.STEWARD_LAUNCH : PDFManager.SUPER_LAUNCH;
     }
 
-    //Lot of dirty laundry here but PDFManager is getting busy
-    public void loadPDFtoViews(PDDocument pdRead){
+    //if loadPDFtoViews is called when this isn't the active Fragment this will return false
+    //and the pdf will be added to a queue.  setupViews() checks for queued documents when done
+    // and it will check the queue then.
+    public boolean loadPDFtoViews(PDDocument pdRead){
+        if(getView() == null) return false;
+
         PDAcroForm acroForm = pdRead.getDocumentCatalog().getAcroForm();
-        PDFManager.setEditsLinLayFromFile(acroForm, towLay);
-        PDFManager.setCheckViewsFromFile(acroForm, dutyLay);
+        PDFManager.setEditsFromFormLin(acroForm, towLay);
+        PDFManager.setCheckViewsFromFormLin(acroForm, dutyLay);
         for(String[] fieldArr : fieldNameEdits){
-            PDFManager.setEditViewFromFile(PDFManager.getTextFieldValue(acroForm, fieldArr[1]),
+            PDFManager.setEditView(PDFManager.getTextFieldValue(acroForm, fieldArr[1]),
                     (EditText) PDFManager.getViewByName(fieldArr[0], thisFrag));
         }
         for(String[] fieldArr : ratingCommentFieldNames){
-            PDFManager.setEditViewFromFile(PDFManager.getTextFieldValue(acroForm, fieldArr[1]),
-                    (EditText) PDFManager.getViewByName(fieldArr[0],thisFrag));
+            PDFManager.setEditView(PDFManager.getTextFieldValue(acroForm, fieldArr[1]),
+                    (EditText) PDFManager.getViewByName(fieldArr[0], thisFrag));
         }
 
         PDFManager.setSpinnerCheckFromFile(acroForm, jobTypeSpinnerOptions[0], thisFrag);
@@ -177,9 +190,8 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
         for(String[] fieldArr: ratingSpinners){
             PDFManager.setSpinnerTextFromFile(acroForm, fieldArr, thisFrag);
         }
+        return true;
     }
-
-
 
     private void editFields(PDAcroForm acroForm) throws IOException{
 
@@ -204,14 +216,14 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
             FormFieldHolder holder = fieldMap.get(fieldName[0]);
             holder.setOutputFromSpinner((Spinner) PDFManager.getViewByName(holder.viewName, thisFrag));
             String[][] fieldArr = holder.getFieldArray();
-            PDFManager.setCheckBoxes(acroForm, fieldArr);
+            PDFManager.setFormCheckBoxes(acroForm, fieldArr);
         }
 
         FormFieldHolder holder = fieldMap.get(jobTypeSpinnerOptions[0][1]);
         holder.setOutputFromSpinner(jobTypeSpinner);
-        PDFManager.setCheckBoxes(acroForm, holder.getFieldArray());
+        PDFManager.setFormCheckBoxes(acroForm, holder.getFieldArray());
 
-        PDFManager.setEditsInLayout(towLay, acroForm);
+        PDFManager.setFormFromEditsLin(towLay, acroForm);
         PDFManager.setCheckboxesInLayout(dutyLay, acroForm);
     }
 
@@ -226,7 +238,7 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
                 File outDir = new File(outputPath);
                 outDir.mkdirs();
                 AssetManager assetMan = context.getAssets();
-                PDDocument pd = PDFManager.loadPDF(inputPath, assetMan);
+                PDDocument pd = PDFManager.loadPDFFile(inputPath, assetMan);
                 if (pd == null) {
                     Log.e("SuperReportFrag", "pd is null, returning");
                     return;
@@ -241,7 +253,7 @@ public class SuperReportFrag extends Fragment implements OnClickListener {
                     editFields(acroForm);
                     Log.w("SuperReportFrag", "DoneEdits");
                     pHandler.sendMessage(Message.obtain(pHandler, DONE_EDITS));
-                    outFileFull = PDFManager.savePDF(pd, outputFileName);
+                    outFileFull = PDFManager.savePDFFile(pd, outputFileName);
                     pd.close();
                 } catch ( IOException ie) {
                     ie.printStackTrace();

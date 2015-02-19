@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.*;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.atasoft.fragments.*;
@@ -20,7 +19,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.File;
 
-//TODO: email intent, read existing file
+//TODO: email intent, apprentice open file, switch over to onViewCreated for view setups
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
@@ -52,15 +51,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
 
 	}
 
-    private void initActionBar(int launchMode){
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(actionBar.getThemedContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1,new String[]{"Supervisor Report", "Apprentice Report", "Job Steward Report"});
-        actionBar.setListNavigationCallbacks(adapter, this);
-        actionBar.setSelectedNavigationItem(launchMode);
-    }
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
@@ -87,6 +77,21 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        swapFrag(itemPosition);
+        return true;
+    }
+
+    private void initActionBar(int launchMode){
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(actionBar.getThemedContext(),
+                android.R.layout.simple_list_item_1, android.R.id.text1,new String[]{"Supervisor Report", "Apprentice Report", "Job Steward Report"});
+        actionBar.setListNavigationCallbacks(adapter, this);
+        actionBar.setSelectedNavigationItem(launchMode);
+    }
+
     private void openAbout(){
         Intent intent = new Intent(this, AboutPage.class);
         startActivity(intent);
@@ -107,41 +112,49 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
         getSupportFragmentManager().beginTransaction().replace(R.id.container, activeFrag).commit();
     }
 
-    @Override
-    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        swapFrag(itemPosition);
-        return true;
-    }
-
-    private void loadToFragment(File pdfFile){
-        PDDocument pdDoc = PDFManager.openPDFFromResources(pdfFile);
+    //if a frage isn't done onViewCreated() it will return false on loadPDFtoViews
+    //The PD is added to queue and getPDFLoadQueued() is called by the fragment once it's done loading
+    private void loadFileToFragment(File pdfFile){
+        PDDocument pdDoc = PDFManager.loadPDFFile(pdfFile);
         if(pdfFile == null){
-            fileFailToast(pdfFile.getName());
+            String failToast = pdfFile.getName() + " is not valid or was not made with Reporter.";
+            Toast.makeText(this, failToast, Toast.LENGTH_LONG).show();
+            Log.w("MainActivity", failToast);
         }
         int reportType = PDFManager.getReportType(pdDoc, pdfFile.getName());
 
         switch (reportType){
             case SUPER_LAUNCH:
                 swapFrag(SUPER_LAUNCH);
-                superFrag.loadPDFtoViews(pdDoc);
+                if(!superFrag.loadPDFtoViews(pdDoc)) addPDToQueue(pdDoc, reportType);
                 break;
             case APPRENTICE_LAUNCH:
                 swapFrag(APPRENTICE_LAUNCH);
-                //apprenticeFrag.loadPDFtoViews(pdDoc);
+                if(!apprenticeFrag.loadPDFtoViews(pdDoc)) addPDToQueue(pdDoc, reportType);
                 break;
             case STEWARD_LAUNCH:
                 swapFrag(STEWARD_LAUNCH);
-                stewardFrag.loadPDFtoViews(pdDoc);
+                if(!stewardFrag.loadPDFtoViews(pdDoc)) addPDToQueue(pdDoc, reportType);
                 break;
             default:
-                break;
+                return;
         }
     }
 
-    private void fileFailToast(String fileName){
-        String failToast = fileName + " is not valid or was not made with Reporter.";
-        Toast.makeText(this, failToast, Toast.LENGTH_LONG).show();
-        Log.w("MainActivity", failToast);
+    private PDDocument queuedPD = null;
+    private int queuedCode = -1;
+    private void addPDToQueue(PDDocument pdDoc, int reportType) {
+            this.queuedCode = reportType;
+            this.queuedPD = pdDoc;
+    }
+
+    public PDDocument getPDFLoadQueued(int typeCode){
+        if(typeCode != queuedCode) return null;
+        PDDocument returnPD = queuedPD;
+        queuedPD = null;
+        queuedCode = -1;
+        Log.w("MainActivity", "returnPD is null: " + (returnPD==null));
+        return returnPD;
     }
 
     public void openFileDialog(){
@@ -158,7 +171,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             dBuilder.setItems(fileStrings, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    loadToFragment(fileArr[which]);
+                    loadFileToFragment(fileArr[which]);
                     dialog.dismiss();
                 }
             });
@@ -166,10 +179,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.OnNavig
             dBuilder.setMessage("No previous PDF report files found in:\n" + PDFManager.outputPath);
         }
 
-        dBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        dBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(), "You clicked ok bitch", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
         dBuilder.create().show();

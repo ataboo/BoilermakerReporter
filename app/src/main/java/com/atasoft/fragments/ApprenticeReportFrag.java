@@ -4,22 +4,22 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.atasoft.boilermakerreporter.MainActivity;
 import com.atasoft.boilermakerreporter.R;
 import com.atasoft.utils.FormFieldHolder;
 import com.atasoft.utils.PDFManager;
@@ -27,7 +27,6 @@ import com.atasoft.utils.PDFManager;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -48,16 +47,20 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
     private LinearLayout towLay;
     private LinearLayout dutyLay;
     private Spinner jobTypeSpinner;
+    private MainActivity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-       View v = inflater.inflate(R.layout.appr_report, container, false);
-        thisFrag = v;
-        this.context = v.getContext();
-        setupViews();
+        View v = inflater.inflate(R.layout.appr_report, container, false);
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        setupViews();
+        super.onViewCreated(view, savedInstanceState);
     }
 
     //<editor-fold desc="pHandler">
@@ -94,11 +97,36 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         }
     }
 
-    public void loadPDFtoViews(String fileName){
+    public boolean loadPDFtoViews(PDDocument pdRead){
+        //if this frag hasn't run onViewCreated() yet it'll return false and the file will be queued in MainActivity
+        if(getView() == null) return false;
 
+        PDAcroForm acroForm = pdRead.getDocumentCatalog().getAcroForm();
+        PDFManager.setCheckViewsFromFormLin(acroForm, towLay);
+        PDFManager.setCheckViewsFromFormLin(acroForm, dutyLay);
+        for(String[] fieldArr : fieldNameEdits){
+            PDFManager.setEditView((EditText) PDFManager.getViewByName(fieldArr[0], thisFrag),
+                    PDFManager.getTextFieldValue(acroForm, fieldArr[1]));
+        }
+
+        PDFManager.setSpinnerCheckFromFile(acroForm, jobSpinnerOptions[0], thisFrag);
+
+        for(String[] fieldArr: attendSpinners){
+            PDFManager.setSpinnerCheckFromFile(acroForm, fieldArr, thisFrag);
+        }
+
+        for(String[] fieldArr: ratingSpinners){
+            PDFManager.setSpinnerTextFromFile(acroForm, fieldArr, thisFrag);
+        }
+
+        return true;
     }
 
     private void setupViews(){
+        this.thisFrag = getView();
+        this.context = thisFrag.getContext();
+        this.parentActivity = (MainActivity) getActivity();
+
         Button goButton = (Button) thisFrag.findViewById(R.id.appr_pushBootan);
         goButton.setOnClickListener(this);
 
@@ -125,9 +153,15 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
         this.jobTypeSpinner = (Spinner) thisFrag.findViewById(R.id.appr_jobTypeSpinner);
 
         this.towLay = (LinearLayout) thisFrag.findViewById(R.id.appr_towCheckLay);
-        PDFManager.populateChecks(thisFrag, towLay, towChecks);
+        PDFManager.populateCheckViewsFromFormLin(thisFrag, towLay, towChecks);
         this.dutyLay = (LinearLayout) thisFrag.findViewById(R.id.appr_dutyCheckLay);
-        PDFManager.populateChecks(thisFrag, dutyLay, dutyChecks);
+        PDFManager.populateCheckViewsFromFormLin(thisFrag, dutyLay, dutyChecks);
+
+        PDDocument pdRead = parentActivity.getPDFLoadQueued(PDFManager.APPRENTICE_LAUNCH);
+        if(pdRead != null){
+            loadPDFtoViews(pdRead);
+
+        }
     }
 
     private void editFields(PDAcroForm acroForm) throws IOException{
@@ -158,7 +192,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
             @Override
             public void run() {
                 AssetManager assetMan = context.getAssets();
-                PDDocument pd = PDFManager.loadPDF(inputPath, assetMan);
+                PDDocument pd = PDFManager.loadPDFFile(inputPath, assetMan);
                 if (pd == null) {
                     Log.e("ApprenticeReportFrag", "pd is null, returning");
                     return;
@@ -173,7 +207,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
                     editFields(acroForm);
                     Log.w("ApprenticeReportFrag", "DoneEdits");
                     pHandler.sendMessage(Message.obtain(pHandler, DONE_EDITS));
-                    outFileFull = PDFManager.savePDF(pd, outputFileName);
+                    outFileFull = PDFManager.savePDFFile(pd, outputFileName);
                     pd.close();
                 } catch ( IOException ie) {
                     ie.printStackTrace();
@@ -189,7 +223,7 @@ public class ApprenticeReportFrag extends Fragment implements OnClickListener {
     private void processCheckSpinner(String fieldName, Spinner spinner, PDAcroForm acroForm) throws IOException {
         FormFieldHolder holder = fieldMap.get(fieldName);
         holder.setOutputFromSpinner(spinner);
-        PDFManager.setCheckBoxes(acroForm, holder.getFieldArray());
+        PDFManager.setFormCheckBoxes(acroForm, holder.getFieldArray());
     }
 
     private void processRatingSpinner(String fieldName, Spinner spinner, PDAcroForm acroForm) throws IOException{
