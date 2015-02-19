@@ -10,14 +10,13 @@ and was separated to keep Toolbox lightweight and permission free.
 
 Feelfree to mail bmtoolbox@gmail.com with any comments or suggestions.
 
-## Changes:
+### Changes:
+#### V 1.01 (2/19/15):
+- Fixed PDF templates that made Adobe Reader for Android crash
+- Made ActionBar spinner update on file load of other type
 
-### V 1.01:
--Fixed PDF templates that made Adobe Reader for Android crash
--Made ActionBar spinner update on file load of other type
+#### V 1.0 (2/19/15):
+- Innitial release
 
-### V 1.01:
--Innitial release
-
-## Notes:
--Form fields won't show up on Android Google Drive's PDF Viewer so I'd suggest Adobe Reader
+### Notes:
+- Form fields won't show up on Android Google Drive's PDF Viewer so I'd suggest Adobe Reader
